@@ -22,6 +22,9 @@ alias ls="ls -Ahl" 							# ls: 			Print all file names with human readable outp
 alias which='type -all' 					# which:        Find executables
 alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
 
+# git-summary utility
+alias git-summary='/usr/local/sbin/git-summary/git-summary'
+
 #   cleanupDS:  Recursively delete .DS_Store files
 #   -------------------------------------------------------------------
 alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
