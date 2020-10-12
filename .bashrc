@@ -22,7 +22,6 @@ alias ls="ls -Ahl" 							# ls: 			Print all file names with human readable outp
 alias which='type -all' 					# which:        Find executables
 alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
 alias dotfiles='/usr/bin/git --git-dir=/Users/mattcooper/.dotfiles/ --work-tree=/Users/mattcooper'
-alias dottest='/usr/bin/git --git-dir=/Users/mattcooper/Desktop/gittest/.test/ --work-tree=/Users/mattcooper/Desktop/gittest'
 # git-summary utility
 alias git-summary='/usr/local/sbin/git-summary/git-summary'
 
