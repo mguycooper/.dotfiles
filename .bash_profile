@@ -52,3 +52,6 @@ unset __conda_setup
 
 #export PATH=".:$PATH"
 #export PYTHONPATH="/usr/local/anaconda3/"
+
+# for bash-completion
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
