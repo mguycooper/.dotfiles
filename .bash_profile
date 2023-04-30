@@ -29,6 +29,8 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 export PS1='$PWD/\n mgc -> '
 
+# dec 2022 - test to run freeze thaw 1d
+export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/Home"
 
 # see https://wiki.archlinux.org/index.php/Bash/Prompt_customization for details on PS1, PS2, PS3, and PS4
 

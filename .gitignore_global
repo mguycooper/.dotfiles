@@ -1,0 +1,37 @@
+*~
+
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+.Spotlight-V100
+.Trashes
+
+# backups
+*.tmp
+*.bk
+*.archive
+*.keep
+*.old
+
+# data
+data/
+
+# private
+private/
+archive/
+bk/
+todo.md
+todo.txt
+readmemgc.txt
+
+# dotfiles bare repo
+.dotfiles
+
+
+

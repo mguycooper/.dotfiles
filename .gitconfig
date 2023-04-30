@@ -1,0 +1,166 @@
+# https://github.com/sadanand-singh/yadm-dotfiles/blob/osx/.gitconfig
+# https://github.com/nicolashery/mac-dev-setup/blob/master/.gitconfig
+# these are from https://github.com/DoomHammer/dotfiles/blob/master/.gitconfig	
+
+# return to this for git_template at some point: https://github.com/greg0ire/git_template
+
+[user]
+    name = mgcooper
+    email = mguycooper@gmail.com
+[credential]
+	username = mgcooper
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
+ 	# helper = store
+[core]
+	excludesfile = /Users/mattcooper/.gitignore_global # see https://www.toptal.com/developers/gitignore/
+	pager = (which diff-so-fancy >/dev/null 2>&1 && diff-so-fancy || which brew >/dev/null 2>&1 && $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight || cat)|less
+	#editor = /usr/local/bin/mate
+	editor = code --wait --new-window # don't delete the --wait
+	symlinks = true
+	# hooksPath = ~/.config/githooks # use default hooks until these are configured
+[hub]
+	protocol = https
+[init]
+	defaultBranch = main
+	templateDir = ~/.git_template 	# this all goes into .git, so use hooksPath to do stuff like copy default README.md, .gitignore, etc.
+[push]
+	default = current # important for rebase w/multiple computers strategy
+[pull]
+	rebase = true	
+[rebase]
+	autoStash = true
+	# updateRefs = true # not sure yet, see https://github.blog/2022-10-03-highlights-from-git-2-38/
+[commit]
+	# template = /Users/coop558/.gitcommitmessage.txt
+[merge]
+	tool = vscode
+[mergetool]
+	prompt = false
+	keepBackup = false
+[mergetool "vscode"]
+	cmd = code --wait --new-window $MERGED
+	# might switch to sublime-merge
+[diff]
+	tool = vscode
+[difftool]
+	prompt = false
+[difftool "vscode"]
+	cmd = code --wait --diff --new-window $LOCAL $REMOTE
+[color]
+  	ui = auto
+[color "branch"]
+	current = yellow reverse
+  	local = yellow
+  	remote = green
+[color "diff"]
+	meta = yellow bold
+  	frag = magenta bold
+  	old = red bold
+  	new = green bold
+[color "status"]
+  	added = yellow
+  	changed = green
+  	untracked = cyan
+[status]
+	showuntrackedfiles = all # see individual files in untracked directories. don't set to 'no'.
+	showstash = true # since i have autostash true, i think i want this
+	showincludeuntracked = true # shows untracked files in the stash
+[alias]
+	undo = reset --soft HEAD^
+	rmbranch = branch -D
+	show-remote-origin = remote show origin
+	show-ignored = status --ignored -s # -s = short
+	ls-untracked = ls-files --others --exclude-standard
+	ls-ignored = ls-files --others # show ignored and untracked
+	ls-bare-files = ls-tree --full-tree -r HEAD
+	ls-dotfiles = ls-tree --full-tree -r HEAD
+	why-ignored = check-ignore -v
+	save = !git add -A && git commit -m 'chore: commit save point' # for routine commits where a commit message is unnecessary
+	cm = commit -m
+	su = status -u
+	s = status
+	a = add -v # testing -cached, should make it verbose
+	tags = tag -l
+	branches = branch -a
+	remotes = remote -v
+	#lg = log          --abbrev-commit -30          --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\"
+	hist = log --graph --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
+	find = log --graph --oneline --all --decorate --date-order --regexp-ignore-case --extended-regexp --grep
+	rfind = log --graph --oneline --all --decorate --date-order --regexp-ignore-case --extended-regexp --invert-grep --grep
+	search = grep --line-number --ignore-case -E -I
+	emptycommit = commit --allow-empty
+	tagdate = log --date-order --graph --tags --simplify-by-decoration --pretty=format:\"%ai %h %d\"
+	# might integrates these into branches
+	branchbydate = for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+	branchcolor = "!for ref in $(git for-each-ref --sort=-committerdate --format=\"%(refname)\" refs/heads/ refs/remotes ); do git log -n1 $ref --pretty=format:\"%Cgreen%cr%Creset %C(yellow)%d%Creset %C(bold blue)<%an>%Creset%n\" | cat ; done | awk '! a[$0]++'"
+[pager]
+    status = true
+	# branch = false # not sure yet
+[help]
+    autocorrect = 50 # 50 = 5 seconds to accept the correction, 10 = 1 second
+[include]
+    path = .gitconfig.local
+[http "https://stash.pnnl.gov"]
+	proxy = http://proxy01.pnl.gov:3128	
+[https "https://stash.pnnl.gov"]
+	proxy = http://proxy01.pnl.gov:3128
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+# below were on personal mac but not pnnl, commneted out the diff/mergetool
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+# [difftool "sourcetree"]
+# 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+# [mergetool "sourcetree"]
+# 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+# 	trustExitCode = true
+
+
+# ------------------------------
+# notes on rebase and autoStash:
+# ------------------------------
+# say i am working on one machine and have local commits, but i want to pull changes from the remote.
+# pull --rebase would rebase my local commits on top of the remote pull. If there are uncommitted changes, then pull --rebase --autostash will first stash my uncommited changes, pull the remote commits, then pop my local committed changes
+
+# ---------------------------
+# notes on pretty log output. 
+# ---------------------------
+# git log --pretty=oneline
+# git log --pretty=short
+# the one in use uses a format string: format:<format-string>
+# %Cred%h makes the (abbreviated) commit hash red. 
+# %s%C(yellow)%d makes the (%s) subject yellow and %d the refnames like the --decorate option of git-log. 
+# %Cgreen(%cr) makes the committer date relative. [%an] adds the author name
+
+# --------------------
+# notes on git hist
+# --------------------
+# --graph adds the | and * to mimick the tree
+# --stat adds much more detail
+# --oneline does what you think
+
+
+# this is my current 'hist':
+# git log --graph  --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
+
+# this is my current 'gist':
+# git log --graph --oneline --decorate --all --date-order
+
+# to see various other options
+# git log --graph --oneline --decorate --all --date-order --abbrev-commit
+# git log --graph --oneline --decorate --stat	--date-order
+# git log --graph --oneline --decorate --stat
+
+# here i tried removing the hash to see if it would preserve the first line which I prefer the dfault but didn't
+# git log --graph --abbrev-commit --date-order --pretty=format:'%s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
+
+
+
+
+
+
