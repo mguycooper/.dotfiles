@@ -60,7 +60,7 @@ git config --global core.excludesfile "$HOME/.gitignore_global"
 git config --global commit.template "$HOME/.gitcommitmessage.txt"
 
 # add my shell sripts to the path
-# export PATH="/usr/local/sbin:/Users/coop558/opt:$USER_SCRIPTS_PATH/SHELL:$PATH"
+# export PATH="/usr/local/sbin:$HOME/opt:$USER_SCRIPTS_PATH/SHELL:$PATH"
 
 #export DYLD_LIBRARY_PATH="/usr/local/lib:$DYLD_LIBRARY_PATH"
 # after reading the post below, I decided against the _LIBRARY_PATH option for now https://medium.com/macos-is-not-linux-and-other-nix-reflections/d-o-y-ou-ld-library-path-you-6ab0a6135a33 

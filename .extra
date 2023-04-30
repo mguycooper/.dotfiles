@@ -72,7 +72,7 @@
 # export PROJ_LIB=/Users/coop558/opt/anaconda3/envs/hexwatershed_tutorial/share/proj
 
 # reset PROJ_LIB (it is a conda-specific variable)
-export PROJ_LIB=/usr/local/share/proj
+# export PROJ_LIB=/usr/local/share/proj
 
 
 
