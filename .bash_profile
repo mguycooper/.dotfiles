@@ -40,7 +40,6 @@ else
         source "$HOME/opt/anaconda3/etc/profile.d/conda.sh"
     else
         export PATH="$HOME/opt/anaconda3/bin:$PATH"
->>>>>>> main-stage
     fi
 fi
 unset __conda_setup
