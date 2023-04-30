@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+
+# Define colors
+BLUE='\[\e[0;34m\]'
+MAGENTA='\[\e[0;95m\]' # magenta='\[\e[0;35m\]''
+GREEN='\[\e[0;32m\]'
+RED='\[\e[0;31m\]'
+RESET='\[\e[0m\]'
+
+# Not used
+# BOLD='\[\]';
+# CYAN='\[\e[0;36m\]'
+# ORANGE='\[\e[1;33m\]'
+# WHITE='\[\e[0;37m\]'
+
+function updatePrompt {
+    # Current working directory
+    PROMPT="${BLUE}${PWD}/${RESET}\n"
+
+    # Current Git repo
+    if type "__git_ps1" > /dev/null 2>&1; then
+        PROMPT="$PROMPT$(__git_ps1 "${MAGENTA}branch:${GREEN}(%s)${RESET}")"
+    fi
+
+    # Current virtualenv. Strip out the path and just leave the env name
+    if [[ $VIRTUAL_ENV != "" ]]; then
+        PROMPT="$PROMPT${MAGENTA} env:${GREEN}{${VIRTUAL_ENV##*/}}${RESET}"
+    fi
+
+    # Current conda environment
+    if [[ $CONDA_DEFAULT_ENV != "" ]]; then
+        PROMPT="$PROMPT${MAGENTA} condaenv:${GREEN}{${CONDA_DEFAULT_ENV##*/}}${RESET}"
+    fi
+
+    PS1="$PROMPT${RED} \u${RESET} -> "
+}
+export -f updatePrompt
+export PROMPT_COMMAND='updatePrompt' # Bash shell executes this function just before displaying the PS1 variable
+
+
+# # SET BASE PROMPT
+# PS1="${BLUE}${PWD}/${RESET}\n"
+# BASE_PROMPT=$PS1
+
+# #--------------------------------------------------------------------------------------------
+# parse_git_branch() {
+#     #  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+# 	 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+# }
+# #--------------------------------------------------------------------------------------------
+
+# # if git comes first, then it must go PROMPT=$BASE_PROMPT, to prevent the git branch
+# # from being continuously appended after every command, whereas with virtualenv, 
+# # it works to go PROMPT=$PROMPT. maybe b/c $PROMPT evaluates to empty
+
+# function updatePrompt {
+
+# 	PROMPT="$BASE_PROMPT" # test this to prevent vscode from continuously appending conda/pyenv env
+	
+#     # Current Git repo
+#     if type "__git_ps1" > /dev/null 2>&1; then
+#         PROMPT="$BASE_PROMPT$(__git_ps1 "${MAGENTA}branch:${GREEN}(%s)${RESET}")"
+#     fi
+
+# 	# example of using the parse_git_branch function:
+# 	# PROMPT="$BASE_PROMPT${MAGENTA} branch:${GREEN}{$(parse_git_branch)}${RESET}"
+# 	# PROMPT="$BASE_PROMPT${MAGENTA} branch:${GREEN}{$(git_prompt)}${RESET}"
+	
+# 	# Current virtualenv. Strip out the path and just leave the env name
+#     if [[ $VIRTUAL_ENV != "" ]]; then
+#         PROMPT="$PROMPT${MAGENTA} env:${GREEN}{${VIRTUAL_ENV##*/}}${RESET}"
+#     fi
+	
+# 	# Current conda environment
+# 	if [[ $CONDA_DEFAULT_ENV != "" ]]; then
+# 		PROMPT="$PROMPT${MAGENTA} condaenv:${GREEN}{${CONDA_DEFAULT_ENV##*/}}${RESET}"
+# 	fi
+
+# 	# This is for tests above, it shows that it's better to put the base prompt color here, rather than above outside the function. But if the function was not used, then the mgc-> color would need to be set above outside the function.
+# 	# PS1="$PROMPT mgc->${RESET} "
+
+# 	# This is the final usage for the function I settled on.
+# 	PS1="$PROMPT${RED} \u${RESET} -> "
+
+# 	# This makes the -> the same color as \u
+# 	# PS1="$PROMPT${RED} \u ->${RESET} "
+# }
+# export -f updatePrompt
+# export PROMPT_COMMAND='updatePrompt' # Bash shell executes this function just before displaying the PS1 variable
+
+
+
+# it took a while to figure out how to modify the function as it was provided at the link above. in particular, getting branch: in the right spot. Notice that it is within the "" AFTER the __git_ps1 command. Below was my first version, where it was outside, but then branch: got appended to PS1 even when i wasn't in a git'd directory. 
+# PROMPT="$BASE_PROMPT${MAGENTA}branch:$(__git_ps1 "${GREEN}(%s)${RESET}")"
+# PROMPT="$BASE_PROMPT$(__git_ps1 "${GREEN}(%s)${RESET}")"
+
+# another example:
+# git_prompt() {
+#     local branch="$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)"
+#     local branch_truncated="${branch:0:30}"
+#     if (( ${#branch} > ${#branch_truncated} )); then
+#         branch="${branch_truncated}..."
+#     fi
+#
+#     [ -n "${branch}" ] && echo " (${branch})"
+# }
+
+
+#-------------------------------------------------------------------
+# TESTING 
+#-------------------------------------------------------------------
+
+# NOTE: for tests below that do not reset the color, the final step in updatePrompt needs to be PS1="$PROMPT mgc->${RESET} " otherwise the text after mgc-> will be in color.
+
+# Simplest case:
+# PS1='$PWD/\n '
+
+# Add color to the PWD line of the prompt, and reset the color:
+# PS1='\[\e[0;34m\]$PWD/\[\e[0m\n\]'
+
+# Add color to the PWD line of the prompt and the next line. NOTE: if this is used, then the final step in updatePrompt needs to be PS1="$PROMPT mgc->${RESET} " otherwise the text after mgc-> will be green.
+# PS1='\[\e[0;34m\]$PWD/\[\e[0m\n\e[0;32m\]'
+
+# Replace BLUE
+# PS1="${BLUE}${PWD}/\[\e[0m\n\e[0;32m\]"
+
+# Replace RESET. NOTE: this revealed that the base case above set the next line green for mgc->, but since updatePrompt sets the next line to the git and/or env, setting the next line green here only works if updatePrompt is not used. Therefore, the syntax can be simplified for the actual usage to this:
+# PS1="${BLUE}${PWD}/${RESET}\n"
+
+# This makes the mgc-> green, but updatePrompt overrides it, so it only works if there is no git branch or env. If there is, mgc-> is white. This revealed that the color modifier for mgc-> needs to be inside updatePrompt at the last step.
+# PS1="${BLUE}${PWD}/${GREEN}\n"
+
+# this is the final, simplest method. It works because updatePrompt sets the color if a git or env is detected, and the mgc-> color is set in the last line. If updatePrompt is not used, then the mgc-> color needs to be set here, as in the example right above.
+# PS1="${BLUE}${PWD}/\n"
+
+# BASE_PROMPT=$PS1

@@ -1,0 +1,155 @@
+# shellcheck shell=bash
+
+# various temporary or idiosyncratic settings you don’t want to commit.
+
+#-------------------------------------
+# things that only need to be run once
+#-------------------------------------
+
+# disable iterm2 cmd-W close keyboard shortcut
+# defaults write com.googlecode.iterm2.plist NSUserKeyEquivalents -dict-add "Close" "\U0000"
+
+# this is what finally got me to switch NOTES to vscode ... it might have worked but i didn't even try just decided it makes sense to quite textmate
+# defaults write com.googlecode.textmate.plist NSUserKeyEquivalents -dict-add "Close" "\U0000"
+
+# undo the above
+# defaults write com.googlecode.iterm2.plist NSUserKeyEquivalents -dict-add "Close" -string "@W"
+
+#--------------------------------
+# CONFIGURE SSL
+#--------------------------------
+
+# export HTTPS_PROXY=http://proxy01.pnl.gov:3128
+# export HTTP_PROXY=http://proxy01.pnl.gov:3128
+# export http_proxy=http://proxy01.pnl.gov:3128
+# export https_proxy=http://proxy01.pnl.gov:3128
+
+# # export NO_PROXY="pnl.gov,pnnl.gov,127.0.0.1,localhost"
+# # export no_proxy="pnl.gov,pnnl.gov,127.0.0.1,localhost"
+# export ALL_PROXY=http://proxy01.pnl.gov:3128
+#
+# # mgc added this when brew failed to install firefox
+# export CURLOPT_PROXY=http://proxy01.pnl.gov:3128
+# # export CURLOPT_NOPROXY="pnl.gov,pnnl.gov,127.0.0.1,localhost"
+#
+# # still didn't work, so tried this:
+# export SSL_CERT_FILE=~/Library/Keychains/keychain_certificates.pem
+# # export SSL_CERT_FILE=/etc/ssl/cert.pem
+
+#--------------------------------
+# configure openfoam
+#--------------------------------
+
+# note: might come across stuff online about mounting a disk image, which i would need to do each time before sourcing below, but i created a case insenstive APFS volume so i don't tink i'll need to do anythign 
+
+# source /Volumes/OpenFOAMs/OpenFOAM-v2112/etc/bashrc
+# source /Volumes/OpenFOAMs/OpenFOAM-v2106/etc/bashrc
+
+# also see rec's here to make it more automatic:
+# https://github.com/mrklein/openfoam-os-x/wiki/Post-configuration
+
+#--------------------------------
+# configure spack
+#--------------------------------
+# source ${HOME}/opt/spack/share/spack/setup-env.sh # for bash, see docs for other shells
+
+#--------------------------------
+# configure software tools
+#--------------------------------
+
+# expose watershed workflow
+# export PYTHONPATH=${HOME}/mysource/watershed-workflow:${PYTHONPATH}
+# export PYTHONPATH=${HOME}/mysource/watershed-workflow/workflow_tpls:${PYTHONPATH}
+# export PYTHONPATH=${HOME}/opt/spack/opt/spack/darwin-catalina-skylake/apple-clang-12.0.0/seacas-2021-01-20-lqjxxuqazbodlkja2ljfj7n5qbcp5vrp/lib:${PYTHONPATH}
+
+# expose icom-mesh
+# export PYTHONPATH=~/myprojects/icom-mesh:${PYTHONPATH}
+
+# expose qgis python (see qgisconfig.sh in $USER_PROJECT_PATH)
+# export PYTHONPATH=${QGISPATH}/Contents/Resources/python:${PYTHONPATH}
+
+# HEXWATERSHED
+# export PROJ_LIB=/Users/coop558/opt/anaconda3/envs/hexwatershed_tutorial/share/proj
+
+# reset PROJ_LIB (it is a conda-specific variable)
+export PROJ_LIB=/usr/local/share/proj
+
+
+
+
+
+# NOTE; THESE WOULD GO IN .completions
+#  from : https://github.com/webpro/dotfiles/blob/master/system/.completion
+
+# BREW_PREFIX=$(brew --prefix)
+
+# # Bash
+
+# if is-executable brew; then
+#   . "$BREW_PREFIX/share/bash-completion/bash_completion"
+# fi
+
+# # Dotfiles
+
+# _dotfiles_completions() {
+#   local cur="${COMP_WORDS[COMP_CWORD]}"
+#   COMPREPLY=( $(compgen -W 'clean dock edit help macos test update' -- $cur ) );
+# }
+
+# complete -o default -F _dotfiles_completions dot
+
+# # npm (https://docs.npmjs.com/cli/completion)
+
+# if is-executable npm; then
+#   . <(npm completion)
+# fi
+
+# # fnm
+
+# if is-executable fnm; then
+#   . <(fnm completions)
+# fi
+
+# # Git
+
+# if is-executable git; then
+#   . "$BREW_PREFIX/etc/bash_completion.d/git-completion.bash"
+# fi
+
+# --------------------------
+#  example .path file (from same repo as above)
+# --------------------------
+
+# # Start with system path
+# # Retrieve it from getconf, otherwise it's just current $PATH
+
+# is-executable getconf && PATH=$($(command -v getconf) PATH)
+
+# export HOMEBREW_PREFIX=$($DOTFILES_DIR/bin/is-supported $DOTFILES_DIR/bin/is-arm64 /opt/homebrew /usr/local)
+
+# # Prepend new items to path (if directory exists)
+
+# prepend-path "/bin"
+# prepend-path "/usr/bin"
+# prepend-path "/usr/local/bin"
+# prepend-path "$HOMEBREW_PREFIX/bin"
+# prepend-path "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin"
+# prepend-path "$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin"
+# prepend-path "$HOMEBREW_PREFIX/opt/grep/libexec/gnubin"
+# prepend-path "$HOMEBREW_PREFIX/opt/python/libexec/bin"
+# prepend-path "$HOMEBREW_PREFIX/opt/ruby/bin"
+# prepend-path "$DOTFILES_DIR/bin"
+# prepend-path "$HOME/bin"
+# prepend-path "$HOME/.cargo/bin"
+# prepend-path "/sbin"
+# prepend-path "/usr/sbin"
+# prepend-path "/usr/local/sbin"
+
+# # Remove duplicates (preserving prepended items)
+# # Source: http://unix.stackexchange.com/a/40755
+
+# PATH=$(echo -n $PATH | awk -v RS=: '{ if (!arr[$0]++) {printf("%s%s",!ln++?"":":",$0)}}')
+
+# # Wrap up
+
+# export PATH
