@@ -19,6 +19,7 @@
     email = mguycooper@gmail.com
 [credential]
  	helper = store
+	# helper = /usr/local/share/gcm-core/git-credential-manager
 	username = mgcooper
 [core]
 	pager = (which diff-so-fancy >/dev/null 2>&1 && diff-so-fancy || which brew >/dev/null 2>&1 && $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight || cat)|less
@@ -85,11 +86,15 @@
 	su = status -u
 	s = status
 	a = add -v # testing -cached, should make it verbose
+	undo = reset --soft HEAD^
+	rmbranch = branch -D
 	show-remote-origin = remote show origin
 	show-ignored = status --ignored -s # -s = short
 	ls-untracked = ls-files --others --exclude-standard
-	ls-ignored = ls-files --others # shows ingored and untracked
-	whyignore = check-ignore -v # **/* git can't parse the wildcard so have to remember to supply it
+	ls-ignored = ls-files --others # show ignored and untracked
+	ls-bare-files = ls-tree --full-tree -r HEAD
+	ls-dotfiles = ls-tree --full-tree -r HEAD
+	why-ignored = check-ignore -v
 	tags = tag -l
 	branches = branch -a
 	remotes = remote -v
@@ -99,6 +104,8 @@
 	search = grep --line-number --ignore-case -E -I
 	emptycommit = commit --allow-empty
 	tagdate = log --date-order --graph --tags --simplify-by-decoration --pretty=format:\"%ai %h %d\"
+	#lg = log          --abbrev-commit -30          --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\"
+	# save = !git add -A && git commit -m 'chore: commit save point' # for routine commits where a commit message is unnecessary
 	# might integrates these into branches
 	branchbydate = for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'
 	branchcolor = "!for ref in $(git for-each-ref --sort=-committerdate --format=\"%(refname)\" refs/heads/ refs/remotes ); do git log -n1 $ref --pretty=format:\"%Cgreen%cr%Creset %C(yellow)%d%Creset %C(bold blue)<%an>%Creset%n\" | cat ; done | awk '! a[$0]++'"
