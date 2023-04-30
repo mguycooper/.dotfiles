@@ -1,0 +1,5 @@
+# sensible linting suggested by vscode-R
+# see https://lintr.r-lib.org/articles/lintr.html for more options
+linters: with_defaults(
+  object_usage_linter = NULL,
+  commented_code_linter = NULL)

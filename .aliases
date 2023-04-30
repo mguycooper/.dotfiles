@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+# Author: Matt Cooper (https://github.com/mgcooper)
+# .aliases (c) 2022, Matt Cooper
+
+# to test a new alias try `type <alias>` 
+
+# this is probably not a good idea if other tools depend on man (like mandoc)
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
+alias dotfiles-untracked='dotfiles ls-files --others' # NOTE: this will be extremely slow, for reference only
+alias bashfiles='code $HOME/'
+alias venvfiles='code $HOME/.virtualenvs'
+alias notes='code $HOME/work/notes/notes.code-workspace'
+alias cheat='code $USER_PROJECT_PATH/cheat-sheets/ '
+alias reload='source $HOME/.bash_profile'
+alias cp='cp -iv' # ask to overwrite existing (i) and verbose (v)
+alias mv='mv -iv'
+alias mkdir='mkdir -pv' # build intermediate directories if they don't exist, and be verbose
+# alias ls='ls -Ahl' # print all file names with human readable output
+alias ls='ls -AlF -G'
+alias lsdots='ls -d .*'
+alias lsdirs="ls -AlF -G | grep --color=never '^d'" # only directories
+alias lspath='echo -e ${PATH//:/\\n}; env | grep PATH' # list all executable Paths
+alias which='type -all' # find executables
+alias home='cd $HOME'
+alias back='cd $OLDPWD'
+alias git-summary='/usr/local/sbin/git-summary/git-summary'
+alias gsu='git status -u'
+alias gsur='git status -u && git remote show origin'
+alias ga='git add -v' # verbose
+alias gd='git diff -w' # ignore whitespace
+alias gdstaged='git diff -w --cached --color=always'
+alias gdunstaged='git diff -w --color=always'
+alias gall='git add --all'
+alias gcm='git commit -m '
+alias grm='git rm --cached '
+alias gco='git checkout'
+alias gcob='git checkout -b'
+alias branches='git branch -a'
+alias desktop='cd $HOME/Desktop'
+alias screenshots='cd $HOME/screenshots'
+# alias cdconda='cd $CONDA_PREFIX' # this is the active environment or base, therefore it doesn't work if base is not active
+alias cdconda='cd $CONDA_ROOT' # this should work when base is not active
+# alias cdpconda='cd $CONDA_PROJECT_PATH' # this is set by postactivate.sh in the conda env /etc/
+alias cdpconda='cd $CONDA_PROJECT_HOME/$CONDA_DEFAULT_ENV' # this will work until I auto generate postactivate.sh in new conda envs
+alias cdsource='cd $USER_SOURCE_PATH'
+alias cdscripts='cd $USER_SCRIPTS_PATH'
+alias cddata='cd $USER_DATA_PATH'
+alias cdnotes='cd $HOME/work/notes'
+alias cdp='cd $USER_PROJECT_PATH'
+alias cdpm='cd $USER_PROJECT_PATH/matlab'
+alias cdpj='cd $USER_PROJECT_PATH/julia'
+alias cdpp='cd $USER_PROJECT_PATH/python'
+alias cdpc='cd $USER_PROJECT_PATH/conda'
+alias cdopt='cd $HOME/opt'
+alias cdcondaenvs='cd $CONDA_PREFIX/envs'
+alias cdfoam='cd $HOME/openfoam/OpenFOAMs'
+alias cdmatfunclib='cd $USER_MATFUNCLIB_PATH'
+alias cdpyfunclib='cd $USER_PYFUNCLIB_PATH'
+alias opentext='open -a TextMate'
+alias openmd='grip -b '
+alias less='less -R' # recommended for spack (or -FSRXc)
+# alias curl='curl -x http://proxy01.pnl.gov:3128' # see .curlc instead
+alias wget='wget -c' # resume interrupted downloads by default
+# alias rmproject='rm -rf ' # see .functions
+alias bashrc='mate $HOME/.bashrc'
+alias bashprofile='mate $HOME/.bash_profile'
+alias bashaliases='mate $HOME/.aliases'
+alias bashfunctions='mate $HOME/.functions'
+alias bashexports='mate $HOME/.exports'
+alias bashprompt='mate $HOME/.bash_prompt'
+alias bashextra='mate $HOME/.extra'
+alias bashnotes='mate $HOME/.dotnotes'
+alias gitconfig='mate $HOME/.gitconfig'
+alias whichvirtualenv='echo $VIRTUAL_ENV'
+alias whichcondaenv='echo $CONDA_DEFAULT_ENV'
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias ......='cd ../../../../../'
+alias .......='cd ../../../../../../'
+alias compy='ssh compy' # the "Host Name" in ~/.ssh/config permits 'ssh hostname' syntax
+# alias constance='ssh coop558@constance.pnl.gov'
+alias constance='ssh constance' # the "Host Name" in ~/.ssh/config permits 'ssh hostname' syntax
+alias cori='ssh -l mcooper -i ~/.ssh/nersc cori.nersc.gov' # to use this syntax, must first generate ssh key only valid for 24 hours use cd ~/work/scripts/ssh && ./sshproxy.sh -u mcooper then enter password + OTP code with no spaces
+alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"	 # recursively delete .DS_Store files
+# also see mrun in .functions:
+# 23 mar 2023 commented out matlab alias trying to get vscode integration setup, modifed mrun accordingly
+# alias matlab="/Applications/MATLAB_R2022b.app/bin/matlab -nodisplay -nodesktop -nosplash" # -nojvm 
+# alias matlab='/Applications/MATLAB_R2022b.app/bin/matlab -desktop' # may want to add options 
+# alias tarzip='tar c enbal.dat | gzip --best > enbal.tar.gz # todo: pass in filename
+# alias virtualenv='pyenv-virtualenv' # shouldn't be needed if using virtualenvwrapper
+# this removes $HOME/.pyenv/shims from path so brew doesn't build against pyenv python. it is supposed to fix the brew doctor warnings about config scripts
+# alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
+# alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g;
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Merge PDF files, preserving hyperlinks
+# Usage: `mergepdf input{1,2,3}.pdf`
+alias mergepdf='gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=_merged.pdf'
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitattributes | map dirname
+alias map="xargs -n1"
+
+# # these could replace some of mine above:
+# # List declared aliases, functions, paths
+# alias aliases="alias | sed 's/=.*//'"
+# alias functions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
+# alias paths='echo -e ${PATH//:/\\n}'

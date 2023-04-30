@@ -1,59 +1,52 @@
-# .bash_profile
+# shellcheck shell=bash
 
-# see https://medium.com/@rajsek/zsh-bash-startup-files-loading-order-bashrc-zshrc-etc-e30045652f2e
-# for a great explainer of the various profiles
+#### .bash_profile
 
-# consider including the stuff here: https://github.com/nicolashery/mac-dev-setup
+# use .profile to expose environment variables outside of the bash shell
 
-# read aliases and functions from .bashrc
-if [ -f ~/.bashrc ]; then
-	. ~/.bashrc
-fi
+# check: https://github.com/Bash-it/bash-it
+# https://thoughtbot.com/blog/manage-team-and-personal-dotfiles-together-with-rcm
 
-# suppress the prompt to switch to zsh
-export BASH_SILENCE_DEPRECATION_WARNING=1
+# to start with default path each time:
+# export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
-# user specific environment and startup programs
-export PATH="/usr/local/sbin:$PATH"
-# export PATH="/usr/local/anaconda3/bin:$PATH"  # commented out by conda initialize
+# do this here b/c some startup processes (e.g. git-completion) benefit
+export PATH="/Applications/MATLAB_R2022b.app/bin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME/opt:$PATH"
 
-# enable the use of color in the bash when using ls and modify the command prompt so that the current working directory and ">>" are shown
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad
+# for gfortran, may not be necessary if gfortran is reinstalled
+export LIBRARY_PATH="$LIBRARY_PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
 
-# modify the command prompt:
-#export PS1="\w>>"
-# I like these more: (\w = ~, \h = , \u = username, \n = newline)
-#export PS1="____   | \w @ \h (\u) \n| => "
-#export PS2="| => "
+# Load the shell dotfiles, and then some (modified from nicolas hery)
+# note: shellcheck directives apply to command following them. directives after shebang apply to entire script.
+# shellcheck source-path=$HOME
+# shellcheck disable=SC1090
+for file in $HOME/.{exports,bash_prompt,bashrc,aliases,functions,extra}; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
 
-export PS1='$PWD/\n mgc -> '
+# NOTE: messing with this might deactivate it, e.g. moving it to .exports
+# in newer versions, I think this is all that is needed: (check path tho)
+# # source $HOME/opt/anaconda3/etc/profile.d/conda.sh
 
-# dec 2022 - test to run freeze thaw 1d
-export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/Home"
-
-# see https://wiki.archlinux.org/index.php/Bash/Prompt_customization for details on PS1, PS2, PS3, and PS4
-
-# to get gfortran to work, I had to add this, see http://wusun.name/blog/2018-04-27-conda-libgfortran-issue/ 
-# also see https://stackoverflow.com/questions/3146274/is-it-ok-to-use-dyld-library-path-on-mac-os-x-and-whats-the-dynamic-library-s
-export DYLD_FALLBACK_LIBRARY_PATH="/usr/local/anaconda3/lib:$DYLD_FALLBACK_LIBRARY_PATH"
+#----------------------------------------------------------------------
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('$"HOME"/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/usr/local/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/usr/local/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "$HOME/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        source "$HOME/opt/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/usr/local/anaconda3/bin:$PATH"
+        export PATH="$HOME/opt/anaconda3/bin:$PATH"
+>>>>>>> main-stage
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+#----------------------------------------------------------------------
 
+# these were after the conda init stuff
 #export PATH=".:$PATH"
 #export PYTHONPATH="/usr/local/anaconda3/"
-
-# for bash-completion
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"

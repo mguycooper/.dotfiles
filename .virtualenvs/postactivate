@@ -1,0 +1,6 @@
+#!/bin/bash
+# This hook is sourced after every virtualenv is activated.
+
+# this cd's into the project directory after running 'activate <virtualenv>' but it assumes the project dir has identical name as the virtualenv
+proj_name=$(basename "$VIRTUAL_ENV")
+cd "$PROJECT_HOME"/"$proj_name" || return

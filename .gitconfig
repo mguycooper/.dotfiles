@@ -1,24 +1,38 @@
+#         _ _
+#        (_) |
+#    __ _ _| |_
+#   / _` | | __|
+#  | (_| | | |_
+#   \__, |_|\__|
+#    __/ |
+#   |___/
+#
+
 # https://github.com/sadanand-singh/yadm-dotfiles/blob/osx/.gitconfig
 # https://github.com/nicolashery/mac-dev-setup/blob/master/.gitconfig
 # these are from https://github.com/DoomHammer/dotfiles/blob/master/.gitconfig	
-
-# return to this for git_template at some point: https://github.com/greg0ire/git_template
+# for gitignore, see: https://www.toptal.com/developers/gitignore/
+# for git_template, see: https://github.com/greg0ire/git_template
 
 [user]
     name = mgcooper
     email = mguycooper@gmail.com
 [credential]
+ 	helper = store
+	# helper = /usr/local/share/gcm-core/git-credential-manager
 	username = mgcooper
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager
- 	# helper = store
 [core]
-	excludesfile = /Users/mattcooper/.gitignore_global # see https://www.toptal.com/developers/gitignore/
 	pager = (which diff-so-fancy >/dev/null 2>&1 && diff-so-fancy || which brew >/dev/null 2>&1 && $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight || cat)|less
-	#editor = /usr/local/bin/mate
 	editor = code --wait --new-window # don't delete the --wait
 	symlinks = true
+	excludesfile = /Users/coop558/.gitignore_global
 	# hooksPath = ~/.config/githooks # use default hooks until these are configured
+[advice]
+	ignoredHook = true # alert if hook is non-executable
+	statusHints = true  # show hints based on git status
+	addEmbeddedRepo = true # warn when creatiing embedded repos. could be useful since i use mono-ish repos
+	submodulesNotUpdated = true # same as above
+	addIgnoredFile = true
 [hub]
 	protocol = https
 [init]
@@ -32,7 +46,7 @@
 	autoStash = true
 	# updateRefs = true # not sure yet, see https://github.blog/2022-10-03-highlights-from-git-2-38/
 [commit]
-	# template = /Users/coop558/.gitcommitmessage.txt
+	template = /Users/coop558/.gitcommitmessage.txt
 [merge]
 	tool = vscode
 [mergetool]
@@ -43,6 +57,7 @@
 	# might switch to sublime-merge
 [diff]
 	tool = vscode
+	renames = true
 [difftool]
 	prompt = false
 [difftool "vscode"]
@@ -67,6 +82,10 @@
 	showstash = true # since i have autostash true, i think i want this
 	showincludeuntracked = true # shows untracked files in the stash
 [alias]
+	cm = commit -m
+	su = status -u
+	s = status
+	a = add -v # testing -cached, should make it verbose
 	undo = reset --soft HEAD^
 	rmbranch = branch -D
 	show-remote-origin = remote show origin
@@ -76,31 +95,29 @@
 	ls-bare-files = ls-tree --full-tree -r HEAD
 	ls-dotfiles = ls-tree --full-tree -r HEAD
 	why-ignored = check-ignore -v
-	save = !git add -A && git commit -m 'chore: commit save point' # for routine commits where a commit message is unnecessary
-	cm = commit -m
-	su = status -u
-	s = status
-	a = add -v # testing -cached, should make it verbose
 	tags = tag -l
 	branches = branch -a
 	remotes = remote -v
-	#lg = log          --abbrev-commit -30          --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\"
 	hist = log --graph --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
 	find = log --graph --oneline --all --decorate --date-order --regexp-ignore-case --extended-regexp --grep
 	rfind = log --graph --oneline --all --decorate --date-order --regexp-ignore-case --extended-regexp --invert-grep --grep
 	search = grep --line-number --ignore-case -E -I
 	emptycommit = commit --allow-empty
 	tagdate = log --date-order --graph --tags --simplify-by-decoration --pretty=format:\"%ai %h %d\"
+	#lg = log          --abbrev-commit -30          --pretty=format:\"%C(magenta)%h%Creset -%C(red)%d%Creset %s %C(dim green)(%cr) [%an]\"
+	# save = !git add -A && git commit -m 'chore: commit save point' # for routine commits where a commit message is unnecessary
 	# might integrates these into branches
 	branchbydate = for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'
 	branchcolor = "!for ref in $(git for-each-ref --sort=-committerdate --format=\"%(refname)\" refs/heads/ refs/remotes ); do git log -n1 $ref --pretty=format:\"%Cgreen%cr%Creset %C(yellow)%d%Creset %C(bold blue)<%an>%Creset%n\" | cat ; done | awk '! a[$0]++'"
+	ignore-list = "! cd -- \"${GIT_PREFIX:-.}\" && git ls-files -v ${1:-.} | sed -n -e \"s,^[a-z] \\(.*\\)$,${GIT_PREFIX:-./}\\1,p\" && git status --ignored --porcelain ${1:-.} 2>/dev/null | sed -n -e \"s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p\" #"
 [pager]
     status = true
 	# branch = false # not sure yet
 [help]
     autocorrect = 50 # 50 = 5 seconds to accept the correction, 10 = 1 second
 [include]
-    path = .gitconfig.local
+	# this tells git to use .gitconfig.local instead of (or in addition to) .gitconfig then if you have multiple machines each one can have .gitconfig.local
+    # path = .gitconfig.local
 [http "https://stash.pnnl.gov"]
 	proxy = http://proxy01.pnl.gov:3128	
 [https "https://stash.pnnl.gov"]
@@ -110,7 +127,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-
 # below were on personal mac but not pnnl, commneted out the diff/mergetool
 [credential "https://dev.azure.com"]
 	useHttpPath = true
@@ -119,7 +135,6 @@
 # [mergetool "sourcetree"]
 # 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 # 	trustExitCode = true
-
 
 # ------------------------------
 # notes on rebase and autoStash:

@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# This hook is sourced after a new virtualenv is activated.
+
+# NOTE its probably not a good idea to mix PROJECT_HOME with USER_PROJECT_PATH but all this does is cd to USER_PROJECT_PATH if a folder with the same name as the virtualenv exists there
+
+# this effectively combines mkvirtualenv with mkproject. it creates a folder in myprojects/python with the same name as the virtualenv, unless one already exists. 
+proj_name=$(basename "$VIRTUAL_ENV")
+
+# check if the directory exists in projects/python or projects/
+if [ -d "$PROJECT_HOME"/"$proj_name" ] 
+then
+    PROJECT_PATH="$PROJECT_HOME"/"$proj_name"
+elif [ -d "$USER_PROJECT_PATH"/"$proj_name" ]
+then
+    PROJECT_PATH="$USER_PROJECT_PATH"/"$proj_name"
+fi
+
+# this is redundant with above but above sets PROJECT_PATH which is used in the else block
+if [ ! -d "$PROJECT_HOME"/"$proj_name" ] && [ ! -d "$USER_PROJECT_PATH"/"$proj_name" ]
+then
+    mkdir "$PROJECT_HOME"/"$proj_name"
+    # I think add2virtualenv is redundant with the setvirtualenvproject below
+    add2virtualenv "$PROJECT_HOME"/"$proj_name"
+    cd "$PROJECT_HOME"/"$proj_name" || return
+    # this wasn't in the suggestion, but it effectively completes the transformation of mkvirtualenv to mkproject. the reason i did this is because afaik, you cannot pass -i (install) and -r (requirements) etc to mkproject
+    setvirtualenvproject "$WORKON_HOME"/"$proj_name" "$PROJECT_HOME"/"$proj_name"
+    
+else
+    echo -e "\n(mgc) project directory $PROJECT_PATH exists, going there now but not linking this virtualenv to that project directory. To do so, run: \n\nsetvirtualenvproject $WORKON_HOME/$proj_name $PROJECT_PATH\n\n(see ./virtualenvs/postmkvirtualenv for details).\n"
+fi
+
+# NOTE: if the project directory already exists when mkvirtualenv is used, and the warning message above is issued, postactivate will still cd into the project directory because it is called when mkvirtualenv is used, so i added a note to the warning message.
+
+# I might want to disable this though, becuase I could see it being common to have a working project directory that I later want to link to a virtualenv, and it would be annoying to have to do the setvirtualenvproject every time ...

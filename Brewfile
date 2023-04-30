@@ -1,42 +1,53 @@
-tap "brewsci/science"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "osgeo/osgeo4mac"
-cask "xquartz"
-brew "openssl@1.1"
-brew "python@3.8"
-brew "coreutils"
+tap "homebrew/services"
+
+# I feel like these are not controversial
+brew "ack"
 brew "curl"
-brew "doxygen"
+brew 'bash-completion'
+brew "bzip2"
+brew "coreutils"
+brew 'diff-so-fancy'
 brew "exiftool"
-brew "netcdf"
-brew "numpy"
-brew "poppler"
-brew "gdal"
 brew "gdb"
 brew "git"
 brew "hub"
-brew "imagemagick"
-brew "ncftp"
-brew "ncview"
+brew "libpng"
+brew 'libtiff'
+brew "netcdf"
+brew "openssl"
+brew "pip-completion"
 brew "p7zip"
-brew "scipy"
+brew "pyenv"
+brew "readline"
+brew "tree"
 brew "unrar"
 brew "wget"
-brew "z"
-brew "brewsci/science/cdo"
-cask "adoptopenjdk"
-cask "alacritty"
-cask "anaconda"
-cask "basictex"
-cask "blockstack"
-cask "cyberduck"
-cask "exodus"
-cask "gfortran"
-cask "inkscape"
-cask "iterm2"
-cask "monero-wallet"
+brew "zsh"
+
+# casks are for gui's / applications / large binaries
 cask "skyfonts"
-cask "sourcetree"
-cask "tor-browser"
+
+# just in case, since this interfered with conda
+# cask "gfortran"
+
+# keeping these separate in case I want to use pyenv
+# brew "python"
+# brew "scipy"
+# brew "gdal"
+
+# Items I downloaded by hand but wish to track for future
+# brew cask iterm2
+
+# Items I am excluding for various reasons
+# cask alacritty
+# cask monero-wallet
+# cask transmit
+# cask anaconda
+# cask blockstack
+# cask exodus
+# cask tor-browser
+# cask sourcetree #bitbucket cloning gui
+# cask "inkscape"

@@ -1,0 +1,38 @@
+
+# just noting this here. i could make conda-hooks a required install like pip is below, and this package would ensure the conda requirements file is up to date anytime a conda package is pushed to git
+# https://pypi.org/project/conda-hooks/
+
+# this keeps conda from messing with brew and pyenv
+auto_activate_base: false
+
+# 
+channels:
+  - conda-forge
+  - r
+  - defaults
+
+
+# experimental to work better with pip,
+# pip_interop_enabled True
+
+# this should no longer be necessary with the proxy environment variables in my .bashrc
+# ssl_verify: false
+
+# ensure that pip, wheel, and setuptools are always installed
+add_pip_as_python_dependency: true
+
+channel_priority: strict
+
+# normies would use this
+# changeps1: True
+
+# might deactivate this if it does not fix update errors
+proxy_servers:
+    http: http://proxy01.pnl.gov:3128
+    https: http://proxy01.pnl.gov:3128
+
+# might also need this, but it sin't recommended
+# ssl_verify: False
+
+# or coudl point to the crt file
+# ssl_verify: mycrtfile.crt # need to find this file

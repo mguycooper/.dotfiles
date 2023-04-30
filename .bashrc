@@ -1,122 +1,78 @@
-# .bashrc
+# shellcheck shell=bash
 
-# see https://medium.com/@rajsek/zsh-bash-startup-files-loading-order-bashrc-zshrc-etc-e30045652f2e
-# for a great explainer of the various profiles
+#### .bashrc
 
-#Source global definitions (i.e. .bash_profile and .bashrc are shell specific, /etc/profile and etc/bashrc are system-wide)
+# shell-specific configuration
+# In general: put stuff in ~/.bashrc, and make ~/.bash_profile source it.
+# do not use export for shell variables, for example PS1, IFS, HISTFILE
+
+#-----------------------------------------------
+# Source system-wide etc/profile and etc/bashrc
+#-----------------------------------------------
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# for z package
-# . /usr/local/etc/profile.d/z.sh
+#-----------------------------------------------
+# configure the history
+#-----------------------------------------------
+# HISTFILE=$HOME/.bash_history # default
+# HISTCONTROL=ignoredups # remove duplicates
+HISTCONTROL=ignoreboth # remove duplicates and lines beginning with space
+HISTIGNORE="&:ls:[bf]g:pwd:exit:cd .."
+HISTSIZE=30000 # set history length
+HISTFILESIZE=30000 # set history length
 
-#----------------------------------------------------------------------------------
-# CONFIGURE PROMPT
-#----------------------------------------------------------------------------------
-# SET BASE PROMPT
-PS1='$PWD/\n '
-BASE_PROMPT=$PS1
-# ADD ACTIVE GIT BRANCH AND PYENV-VIRTUALENV TO PROMPT
-# (see https://github.com/pyenv/pyenv-virtualenv/issues/135#issuecomment-582180662)
-function updatePrompt { 
-    # Styles
-    GREEN='\[\e[0;32m\]'
-    BLUE='\[\e[0;34m\]'
-    RED='\[\e[0;95m\]'  # light magenta
-    RESET='\[\e[0m\]'
-    # Current Git repo
-    if type "__git_ps1" > /dev/null 2>&1; then
-        PROMPT="$BASE_PROMPT$(__git_ps1 "${RED}branch:${GREEN}(%s)${RESET}")"
-    fi
-    # Current virtualenv
-    if [[ $VIRTUAL_ENV != "" ]]; then
-        # Strip out the path and just leave the env name
-        PROMPT="$PROMPT${RED} env:${BLUE}{${VIRTUAL_ENV##*/}}${RESET}"
-    fi
-    PS1="$PROMPT${RESET} mgc~> "
-}
-export -f updatePrompt
-# Bash shell executes this function just before displaying the PS1 variable
-export PROMPT_COMMAND='updatePrompt'
+# note: it is common to see HISTCONTROL=ignoreboth. use ignore spaces to intentionally enter commands with a space so they won't be logged (since the space has no effect on the command). i think my custom prompt inserts a space and that's why my history files weren't logging, but I am not certain. also try the 'history' command to display the history
 
-# ----------------------------------------------------------------------------
-# user specific alisases and functions
-# ----------------------------------------------------------------------------
-# most borrowed from https://natelandau.com/my-mac-osx-bash_profile/
-alias cp='cp -iv'
-alias mv='mv -iv'
-alias mkdir='mkdir -pv'
-alias ls='ls -Ahl' 							# ls: 			Print all file names with human readable output
-alias lsdots='ls -d .*'
-alias which='type -all' 					# which:        Find executables
-alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
-alias home='cd $HOME'
-alias back='cd $OLDPWD'
-alias reload='source ~/.bash_profile'
-alias open='open -a TextMate'
-alias less='less -R'
-alias wget='wget -c'
-alias bashrc='open ~/.bashrc'
-alias cdp='cd $HOME/myprojects'
-alias cdpm='cd $HOME/myprojects/matlab'
-alias cddata='cd $HOME/mydata'
-alias cdenvs='cd /usr/local/anaconda3/envs'
-alias cdgit='cd ~/Documents/git'
-alias cdmatfunclib='cd $HOME/MATLAB/matfunclib'
-alias gsu='git status -u'
-alias gsur='git status -u && git remote show origin'
-alias ga='git add -v' # verbose
-alias gd='git diff -w' # ignore whitespace
-alias gcm='git commit -m'
-alias grm='git rm --cached'
-alias gall='git add --all'
-alias branches='git branch -a'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-alias ......='cd ../../../../..'
-# next is for git managed dotfiles
-alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
-# git-summary utility
-alias git-summary='/usr/local/sbin/git-summary/git-summary'
+shopt -s histappend # append to the history file, don't overwrite it
+shopt -s cmdhist # Store multiline commands as one line.
+shopt -s checkwinsize # resize the window when output
+shopt -s cdspell # Autocorrect typos in path names when using `cd`
+shopt -s dirspell # Spellcheck directories
+# shopt -s nocaseglob; #  Case-insensitive globbing (used in pathname expansion)
+# shopt -s autocd # cd into directories w/o typing 'cd' first (interactive shells only)
+shopt -s cdable_vars # If this is set, an argument to the cd builtin command that is not a directory is assumed to be the name of a variable whose value is the directory to change to.
 
-#   cleanupDS:  Recursively delete .DS_Store files
-#   -------------------------------------------------------------------
-alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
-	
-	
-# from https://natelandau.com/my-mac-osx-bash_profile/, see for many more options:
+#-----------------------------------------------
+# delete duplicate PATH entries
+#-----------------------------------------------
+PATH=$(printf "%s" "$PATH" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')
+PYTHONPATH=$(printf "%s" "$PYTHONPATH" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')
 
-#   extract:  Extract most know archives with one command
-#   ---------------------------------------------------------
-    extract () {
-        if [ -f $1 ] ; then
-          case $1 in
-            *.tar.bz2)   tar xjf $1     ;;
-            *.tar.gz)    tar xzf $1     ;;
-            *.bz2)       bunzip2 $1     ;;
-            *.rar)       unrar e $1     ;;
-            *.gz)        gunzip $1      ;;
-            *.tar)       tar xf $1      ;;
-            *.tbz2)      tar xjf $1     ;;
-            *.tgz)       tar xzf $1     ;;
-            *.zip)       unzip $1       ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1        ;;
-            *)     echo "'$1' cannot be extracted via extract()" ;;
-             esac
-         else
-             echo "'$1' is not a valid file"
-         fi
-    }
 
-# To use TextMate as editor for subversion, git, and similar (See TextMate preferences)
-# export EDITOR="/usr/local/bin/mate -w"
+#-----------------------------------------------
+# macos settings
+#-----------------------------------------------
 
-# if file does not exist, create it
-# if [ ! -e "$file" ] ; then
-#    touch "$file"
-#	open -a TextMate "$file"
-#fi
+# to see the default app open settings:
+# mate ~/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist
+# I could do this to set files iwthout an extension whihc i think are id'd as unix executables to open in textmate:
+# defaults write ~/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers -array-add '{LSHandlerContentType=public.unix-executable;LSHandlerRoleAll=com.macromates.textmate;}'
+# But this came up when trying to open .git/info/exclude files that kept opening in TextEdit
+# the issue is probably with default GIT_EDITOR or maybe git doesn't use that to open these files
+# either way a better solution than messing with the plist is to just remmember to use 'mate .git/info/exlude'
+# also recall i removed the alias open='mate' because i want to use open on pdf etc which it does automatically
+# so basically its just for non-extension files that open won't work
+
+
+# Focus follows mouse means wherever the mouse is, the app is 'on top'
+# this would solve the thing where i have to carefully arrange windows to type in one while reading another
+# but it may cause problems elsewhere, so leave commented out until experiemnted
+
+# Enable
+# defaults write com.apple.Terminal FocusFollowsMouse -string true
+
+# Disable (Default)
+# defaults write com.apple.Terminal FocusFollowsMouse -string false
+
+# -----------------------------------------------------------------------
+# REGARDING export: notice some variables are set below with 'export'. export is used for environment variables i.e., variables that need to be visible to other programs launched from the shell, whereas ones used by shell just need to be set. Examples:
+# HOME
+# PATH
+# LD_LIBRARY_PATH
+# EDITOR
+# VISUAL
+# DISPLAY
+# LESS
+# http_proxy
