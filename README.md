@@ -1,4 +1,4 @@
-# .dotfiles
+# .files
 
 ## Setup (requires git-create)
     git init --bare $HOME/.files
