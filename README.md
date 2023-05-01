@@ -1,14 +1,14 @@
 # .dotfiles
 
 ## Setup (requires git-create)
-    git init --bare $HOME/.dotfiles
-    git create .dotfiles
-    alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-    dotfiles remote add origin https://github.com/mgcooper/.dotfiles.git
+    git init --bare $HOME/.files
+    git create .files
+    alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
+    dotfiles remote add origin https://github.com/mgcooper/.files.git
 
 ## Configuration
     dotfiles config --local status.showUntrackedFiles no
-    dotfiles remote set-url origin https://github.com/mgcooper/.dotfiles.git
+    dotfiles remote set-url origin https://github.com/mgcooper/.files.git
 
 ## Usage
     dotfiles status
