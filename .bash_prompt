@@ -19,7 +19,11 @@ function updatePrompt {
 
     # Current Git repo
     if type "__git_ps1" > /dev/null 2>&1; then
-        PROMPT="$PROMPT$(__git_ps1 "${MAGENTA}branch:${GREEN}(%s)${RESET}")"
+        if [[ "$PWD" == "$HOME" && -d "$HOME/.files" ]]; then
+            PROMPT="$PROMPT${MAGENTA}branch:${GREEN}(dotfiles)${RESET}"
+        else
+            PROMPT="$PROMPT$(__git_ps1 "${MAGENTA}branch:${GREEN}(%s)${RESET}")"
+        fi
     fi
 
     # Current virtualenv. Strip out the path and just leave the env name

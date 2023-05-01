@@ -151,6 +151,11 @@ export QGISPATH=/Applications/QGIS.app
 # spcifically the links in tara's answer, esp. link 1 and 3
 
 #--------------------------------
+#   CONFIGURE JAVA
+#--------------------------------
+export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/Home"
+
+#--------------------------------
 #   CONFIGURE CONDA
 #--------------------------------
 
@@ -231,6 +236,26 @@ export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 [[ -r "/usr/local/etc/bash_completion.d/git-completion.bash" ]] && . "/usr/local/etc/bash_completion.d/git-completion.bash"
 [[ -r "/usr/local/etc/bash_completion.d/git-prompt.sh" ]] && . "/usr/local/etc/bash_completion.d/git-prompt.sh"
+
+# setup completions for dotfiles
+# source /usr/local/etc/bash_completion.d/git-completion.bash
+# __git_complete dotfiles _git
+
+# _dotfiles_completion() {
+#   local cur prev
+#   cur="${COMP_WORDS[COMP_CWORD]}"
+#   prev="${COMP_WORDS[COMP_CWORD - 1]}"
+#   case "$prev" in
+#     dotfiles)
+#       COMPREPLY=($(compgen -W "$(dotfiles --list-commands)" -- "$cur"))
+#       ;;
+#     *)
+#       COMPREPLY=($(compgen -f -- "$cur"))
+#       ;;
+#   esac
+#   return 0
+# }
+# complete -F _dotfiles_completion dotfiles
 
 # the /usr/local/etc/profile.d/bash_completion.sh script should source the @2 version:
 # /usr/local/Cellar/bash-completion@2/2.11/etc/profile.d/bash_completion.sh
