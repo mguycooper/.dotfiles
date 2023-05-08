@@ -58,10 +58,6 @@ note() {
     mate "$note_name$(date "+%Y-%m-%d")".md
 }
 
-# this might work to find a file and open it, but need to ensure exact match behavior
-# findopen () { find . -iname "$1" -exec TextMate {} + ; }
-
-
 # this isn't really what i want b/c it only pipes to less if ls -la is used; fix later
 lsless () {
 	if [[ $@ == "-la" ]]; then
@@ -145,11 +141,3 @@ dataurl () {
 #     target "$(which "$a")"
 # 	done
 # }
-
-
-# if file does not exist, create it
-# 17 March 2023 replaced $file with $1 not sure if this was a snippet left unfinished ...
-# if [ ! -e "$1" ]; then
-# 	touch "$1"
-# 	open "$1"
-# fi

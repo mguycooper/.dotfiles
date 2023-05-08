@@ -4,6 +4,8 @@
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
+set completion-ignore-case On
+
 # ----------------------------------
 # these were defined in my compy shell
 # might explain why cmd-backspace doesn't delete the entire line on compy
@@ -15,6 +17,3 @@
 # "\t": menu-complete
 # "\e[Z": menu-complete-backward
 # ----------------------------------
-
-
-set completion-ignore-case On

@@ -4,25 +4,26 @@
 
 # to test a new alias try `type <alias>` 
 
-# this is probably not a good idea if other tools depend on man (like mandoc)
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
-alias dotfiles-untracked='dotfiles ls-files --others' # NOTE: this will be extremely slow, for reference only
-alias bashfiles='code $HOME/'
-alias venvfiles='code $HOME/.virtualenvs'
-alias notes='code $HOME/work/notes/notes.code-workspace'
-alias cheat='code $USER_PROJECT_PATH/cheat-sheets/ '
 alias reload='source $HOME/.bash_profile'
 alias cp='cp -iv' # ask to overwrite existing (i) and verbose (v)
 alias mv='mv -iv'
 alias mkdir='mkdir -pv' # build intermediate directories if they don't exist, and be verbose
-# alias ls='ls -Ahl' # print all file names with human readable output
-alias ls='ls -AlF -G'
+alias ls='ls -AlF -G' # all files, long format, dirs/ executables* symlinks@, colorized
 alias lsdots='ls -d .*'
 alias lsdirs="ls -AlF -G | grep --color=never '^d'" # only directories
 alias lspath='echo -e ${PATH//:/\\n}; env | grep PATH' # list all executable Paths
+alias lsaliases="alias | sed 's/=.*//'"
+alias lsfunctions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
+alias less='less -R' # recommended for spack (or -FSRXc)
+alias wget='wget -c' # resume interrupted downloads by default
+alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"	 # recursively delete .DS_Store files
+alias update='brew update && brew upgrade && brew cleanup && npm install npm -g && npm update -g && sudo softwareupdate -ia'
 alias which='type -all' # find executables
-alias home='cd $HOME'
-alias back='cd $OLDPWD'
+alias paths='echo -e ${PATH//:/\\n}'
+
+# Git
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
+alias dotfiles-untracked='dotfiles ls-files --others' # NOTE: this will be extremely slow, for reference only
 alias git-summary='/usr/local/sbin/git-summary/git-summary'
 alias gsu='git status -u'
 alias gsur='git status -u && git remote show origin'
@@ -36,6 +37,10 @@ alias grm='git rm --cached '
 alias gco='git checkout'
 alias gcob='git checkout -b'
 alias branches='git branch -a'
+
+# cd
+alias home='cd $HOME'
+alias back='cd $OLDPWD'
 alias desktop='cd $HOME/Desktop'
 alias screenshots='cd $HOME/screenshots'
 # alias cdconda='cd $CONDA_PREFIX' # this is the active environment or base, therefore it doesn't work if base is not active
@@ -56,12 +61,18 @@ alias cdcondaenvs='cd $CONDA_PREFIX/envs'
 alias cdfoam='cd $HOME/openfoam/OpenFOAMs'
 alias cdmatfunclib='cd $USER_MATFUNCLIB_PATH'
 alias cdpyfunclib='cd $USER_PYFUNCLIB_PATH'
-alias opentext='open -a TextMate'
-alias openmd='grip -b '
-alias less='less -R' # recommended for spack (or -FSRXc)
-# alias curl='curl -x http://proxy01.pnl.gov:3128' # see .curlc instead
-alias wget='wget -c' # resume interrupted downloads by default
-# alias rmproject='rm -rf ' # see .functions
+alias ..='cd ../'
+alias ...='cd ../../'
+alias ....='cd ../../../'
+alias .....='cd ../../../../'
+alias ......='cd ../../../../../'
+alias .......='cd ../../../../../../'
+
+# shortcuts to open files
+alias bashfiles='code $HOME/'
+alias venvfiles='code $HOME/.virtualenvs'
+alias notes='code $HOME/work/notes/notes.code-workspace'
+alias cheat='code $USER_PROJECT_PATH/cheat-sheets/ '
 alias bashrc='mate $HOME/.bashrc'
 alias bashprofile='mate $HOME/.bash_profile'
 alias bashaliases='mate $HOME/.aliases'
@@ -71,28 +82,22 @@ alias bashprompt='mate $HOME/.bash_prompt'
 alias bashextra='mate $HOME/.extra'
 alias bashnotes='mate $HOME/.dotnotes'
 alias gitconfig='mate $HOME/.gitconfig'
+alias opentext='open -a TextMate'
+alias openmd='grip -b'
+
+# brew, virtualenv, conda
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew' # remove $HOME/.pyenv/shims from path so brew doesn't build against pyenv python
 alias whichvirtualenv='echo $VIRTUAL_ENV'
 alias whichcondaenv='echo $CONDA_DEFAULT_ENV'
-alias ..='cd ../'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-alias ......='cd ../../../../../'
-alias .......='cd ../../../../../../'
+# alias virtualenv='pyenv-virtualenv' # not needed if using virtualenvwrapper
+
+# ssh
 alias compy='ssh compy' # the "Host Name" in ~/.ssh/config permits 'ssh hostname' syntax
-# alias constance='ssh coop558@constance.pnl.gov'
-alias constance='ssh constance' # the "Host Name" in ~/.ssh/config permits 'ssh hostname' syntax
+alias constance='ssh coop558@constance.pnl.gov'
 alias cori='ssh -l mcooper -i ~/.ssh/nersc cori.nersc.gov' # to use this syntax, must first generate ssh key only valid for 24 hours use cd ~/work/scripts/ssh && ./sshproxy.sh -u mcooper then enter password + OTP code with no spaces
-alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"	 # recursively delete .DS_Store files
-# also see mrun in .functions:
-# 23 mar 2023 commented out matlab alias trying to get vscode integration setup, modifed mrun accordingly
+
+# use mrun in .functions instead
 # alias matlab="/Applications/MATLAB_R2022b.app/bin/matlab -nodisplay -nodesktop -nosplash" # -nojvm 
-# alias matlab='/Applications/MATLAB_R2022b.app/bin/matlab -desktop' # may want to add options 
-# alias tarzip='tar c enbal.dat | gzip --best > enbal.tar.gz # todo: pass in filename
-# alias virtualenv='pyenv-virtualenv' # shouldn't be needed if using virtualenvwrapper
-# this removes $HOME/.pyenv/shims from path so brew doesn't build against pyenv python. it is supposed to fix the brew doctor warnings about config scripts
-# alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
-# alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g;
 
 # Show/hide hidden files in Finder
 alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
@@ -111,8 +116,5 @@ alias mergepdf='gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=_merged.p
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
 
-# # these could replace some of mine above:
-# # List declared aliases, functions, paths
-# alias aliases="alias | sed 's/=.*//'"
-# alias functions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
-# alias paths='echo -e ${PATH//:/\\n}'
+# hub alias
+eval "$(hub alias -s)"

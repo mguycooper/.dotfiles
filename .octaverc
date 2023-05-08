@@ -1,0 +1,83 @@
+% # ~/.octaverc: Octave per-user initialization file.
+
+% Load standard packages
+pkg load struct
+pkg load statistics
+pkg load tablicious
+# pkg load optim
+
+# To see which packages are installed
+# pkg list
+
+# To install packages:
+# pkg install -forge struct
+# pkg install -forge statistics
+# pkg install -forge tablicious
+# pkg install -forge optim
+
+
+% ---------------------------------------------------------------------
+
+% # If Octave is running in a known terminal emulator set the title.
+% term_title = ["GNU Octave " version];
+% if (exist ("isguirunning") && isguirunning ())
+%   PS1 ("octave:\\#> ");
+% elseif (regexp (getenv ("TERM"), "^(rxvt|xterm)"))
+%   PS1 (["\\[\\033]0;" term_title "\\007\\033[32m\\]octave:\\#>\\[\\033[00m\\] "]);
+% else
+%   PS1 ("octave:\\#> ");
+% end
+% clear term_title
+
+% # Set up Octave editor.
+% if getenv ("DISPLAY") && file_in_path (getenv ("PATH"), "gvim")
+%   edit editor "gvim %s"
+%   edit mode async
+% else
+%   edit mode sync
+% endif
+
+% # Load my ~/.inputrc to override any conflicting keybindings from Octave.
+% if (exist ("readline_read_init_file") == 5)
+%   readline_read_init_file ("~/.inputrc");
+% else
+%   read_readline_init_file ("~/.inputrc");
+% endif
+
+% # Save interpreter history with the same settings as for bash.
+% if (exist ("history_control") == 5)
+%   history_control ("ignoreboth");
+% endif
+% history_file ("~/.octave_history");
+% if (exist ("history_save") == 5)
+%   history_save (true);
+% endif
+% history_size (1000);
+% if (exist (history_file ()))
+%   history ("-r", history_file ());
+% endif
+
+% # Set up plotting preferences, but only if we're graphical.
+% if (getenv ("DISPLAY"))
+
+%   # Use Qt or FLTK for plotting by default if available.
+%   if (exist ("available_graphics_toolkits") == 5)
+%     if (any (cell2mat (strfind (available_graphics_toolkits (), "qt"))))
+%       graphics_toolkit ("qt");
+%     elseif (any (cell2mat (strfind (available_graphics_toolkits (), "fltk"))))
+%       graphics_toolkit ("fltk");
+%     elseif (any (cell2mat (strfind (available_graphics_toolkits (), "gnuplot"))))
+%       graphics_toolkit ("gnuplot");
+%     endif
+%   endif
+
+%   # Choose Gnuplot terminal based on available.
+%   [status, s] = system ([gnuplot_binary " -e 'set term' 2>&1 | grep '\\<qt\\> '"]);
+%   if isempty (s)
+%     putenv ("GNUTERM", "x11");
+%   else
+%     putenv ("GNUTERM", "qt");
+%   endif
+%   clear s status
+
+% endif
