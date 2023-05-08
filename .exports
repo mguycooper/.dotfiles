@@ -2,56 +2,37 @@
 
 #### .exports
 
-#--------------------------------
-#  COLORS, EDITOR, etc
-#--------------------------------
-
-# suppress the prompt to switch to zsh
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-# enable the use of color in the bash when using ls
-# if defined, can use -G rather than --colors=auto
-export CLICOLOR=1
+export BASH_SILENCE_DEPRECATION_WARNING=1 # suppress the prompt to switch to zsh
+export CLICOLOR=1 # enable the use of color in the bash when using ls (if defined, can use -G rather than --colors=auto)
 export LSCOLORS=ExFxCxDxBxegedabagacad
-
-# set editor
-export EDITOR='/usr/local/bin/mate'
+export EDITOR='/usr/local/bin/mate' # set editor
 export GIT_EDITOR='/usr/local/bin/code --wait --new-window'
 export JULIA_EDITOR='/usr/local/bin/code'
 export LESSEDIT='mate -l %lm %f'
+export LESS_TERMCAP_md="${CYAN}"; # Highlight section titles in manual pages.
+export MANPAGER='less -R --use-color -Ddg -Du+y' # -D sets colors, -Ddg sets bold text green, -Du+y sets underlined text bright yellow
+# export MANPAGER='less -X'; # Don’t clear the screen after quitting a manual page.
 
-# Highlight section titles in manual pages.
-export LESS_TERMCAP_md="${CYAN}";
-
-# Don’t clear the screen after quitting a manual page.
-# export MANPAGER='less -X';
-
-# -D sets colors, -Ddg sets bold text green, -Du+y sets underlined text bright yellow
-export MANPAGER='less -R --use-color -Ddg -Du+y'
-
-# hub alias
-eval "$(hub alias -s)"
-
-# remove $HOME/.pyenv/shims from path so brew doesn't build against pyenv python. should reduce or eliminate brew doctor warnings about config scripts in certain locations.
-alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
-
-#--------------------------------
-#   USER PATHS
-#--------------------------------
-
+# USER PATHS
 export USER_DATA_PATH=${HOME}/work/data
 export USER_PROJECT_PATH=${HOME}/myprojects
 export USER_SOURCE_PATH=${HOME}/mysource
 export USER_SCRIPTS_PATH=${HOME}/work/scripts
 export USER_MATFUNCLIB_PATH=${HOME}/MATLAB/matfunclib
 export USER_PYFUNCLIB_PATH=${USER_PROJECT_PATH}/python/pyfunclib
-export E3SM_DATA_PATH=${HOME}/work/data/e3sm
-export E3SM_OUTPUT_PATH=${HOME}/work/data/e3sm/output
-export E3SM_TEMPLATE_PATH=${HOME}/work/data/e3sm/templates
+
+export USER_E3SM_DATA_PATH=${HOME}/work/data/e3sm
+export USER_E3SM_OUTPUT_PATH=${HOME}/work/data/e3sm/output
+export USER_E3SM_CONFIG_PATH=${HOME}/work/data/e3sm/config
+export USER_E3SM_FORCING_PATH=${HOME}/work/data/e3sm/forcing
+export USER_E3SM_TEMPLATE_PATH=${HOME}/work/data/e3sm/templates
 
 export COMPY_ROOT_PATH=coop558@compy01:
 export COMPY_SCRATCH_PATH=${COMPY_ROOT_PATH}/compyfs/coop558/e3sm_scratch
-export COMPY_DATA_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm
+export COMPY_DATA_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data
+export COMPY_E3SM_DATA_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm
+export COMPY_E3SM_FORCING_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm/forcing
+export COMPY_E3SM_CONFIG_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm/config
 
 export CONSTANCE_ROOT_PATH=coop558@constance03:
 
@@ -62,9 +43,8 @@ git config --global commit.template "$HOME/.gitcommitmessage.txt"
 # add my shell sripts to the path
 # export PATH="/usr/local/sbin:$HOME/opt:$USER_SCRIPTS_PATH/SHELL:$PATH"
 
-#export DYLD_LIBRARY_PATH="/usr/local/lib:$DYLD_LIBRARY_PATH"
-# after reading the post below, I decided against the _LIBRARY_PATH option for now https://medium.com/macos-is-not-linux-and-other-nix-reflections/d-o-y-ou-ld-library-path-you-6ab0a6135a33 
-# but if I decide to use it, might be safest to use DYLD_FALLBACK_LIBRARY_PATH
+# for gfortran, may not be necessary if gfortran is reinstalled
+export LIBRARY_PATH="$LIBRARY_PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
 
 #--------------------------------
 #   CONFIGURE BREW
@@ -75,13 +55,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1 #
 # I searched the brew doc's and there are no environment variables HOMEBREW_CC or HOMEBREW_CXX but issue brew --env and they are visible (clang/clang++)
 export HOMEBREW_CC=gcc-11
 export HOMEBREW_CXX=g++-11
-
-# Tell homebrew to autoupdate once a week (not every time).
-export HOMEBREW_AUTO_UPDATE_SECS=604800	
-
-# this thread has a solution that might help with the verbose warnings
-# https://github.com/Homebrew/brew/issues/5803
-# appears the issue could be related xcode, w/o it brew builds stuff from source, if its later installed the symlinks get confused
+export HOMEBREW_AUTO_UPDATE_SECS=604800	# autoupdate once a week (not every time).
 
 #--------------------------------
 #   CONFIGURE PYENV
@@ -111,29 +85,6 @@ export PYENV_VIRTUALENV_VERBOSE_ACTIVATE="true" # verbose activate behavior
 pyenv virtualenvwrapper_lazy
 
 #--------------------------------
-#   CONFIGURE PIP
-#--------------------------------
-
-# https://docs.python-guide.org/dev/pip-virtualenv/
-
-# Require an active virtual environment for pip - prevents installing globally
-# i put this in pip.conf instead. see pip config debug for where pip.conf exists
-# export PIP_REQUIRE_VIRTUALENV=true
-
-# NOTE: since i put that in my .virtualenv config, it means i cannot use pip to install globally
-# if this leads to problems, they suggest defining global-pip then you can do gpip install <globally available package>
-
-# gpip() {
-#     PIP_REQUIRE_VIRTUALENV=false pip "$@"
-# }
-
-# cache packages for future use:
-# export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache # also see pip.conf
-
-# OR: 
-# PYENV_VIRTUALENV_CACHE_PATH = 
-
-#--------------------------------
 #   CONFIGURE ITERM2
 #--------------------------------
 iterm2_print_user_vars()
@@ -159,13 +110,13 @@ export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/
 #   CONFIGURE CONDA
 #--------------------------------
 
-# enable conda autocompletion (finally got this to work by upgrading to bash v5)
+# enable conda autocompletion (got this to work by upgrading to bash v5)
 export CONDA_PREFIX=$HOME/opt/anaconda3
 if [[ -r $CONDA_PREFIX/etc/profile.d/bash_completion.sh ]]; then
 	source "$CONDA_PREFIX"/etc/profile.d/bash_completion.sh
 fi
 
-# i define this for my conda hooks
+# define this for conda hooks
 export CONDA_PROJECT_HOME=${USER_PROJECT_PATH}/conda
 # export CONDA_PROJECT_PATH=${USER_PROJECT_PATH}/conda # init so the alias works
 
@@ -205,89 +156,20 @@ export PYTHONPATH=${USER_PROJECT_PATH}/python/pyflowline:${PYTHONPATH}
 export R_HOME=/Library/Frameworks/R.framework/Resources # R.home() in the R gui
 # export R_BINARY=/Library/Frameworks/R.framework/Resources/bin # R.home('bin') in the R gui
 
-# tell Rstudio which R to use. 
-# still not sure if Rstudio uses /usr/local/Cellar/r or /Library/Frameworks/R.framework/Resources/R
+# tell Rstudio which R to use. not sure if Rstudio uses /usr/local/Cellar/r or /Library/Frameworks/R.framework/Resources/R
 # export RSTUDIO_WHICH_R=/usr/local/Cellar/r
 
 # for cli, alias radian to use a particular r binary:
 # alias radian='radian --r-binary=/path/to/R'
 
 #--------------------------------
-#   NVM
-#--------------------------------
-
-# Jan 2023 - I think this is slowing down startup. Commented out to see if it affects anything.
-# Mar 2023 I reactivated to install marp and it didn't seem to slow down startup, but I received errors after installing marp about EPROTO and openssl which may be related to the original issue from pnnl so I deactivated again.
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-#--------------------------------
 #   bash-completion (Git too)
 #--------------------------------
-
-# NOTE: apparently this would work:
-# test -f ~/.git-completion.bash && . $_
-# $_ means the last argument to the previous command. so . $_ means run it - "it" being .git-completion.bash in this case
-
-# after running this once, git completion (and git command prompt) worked. then i commented it out, and used the brew one below, and vscode terminal did not recognize git prompt until i reactivated this. so i guess it is necessary to source them each, and i could remove the 'then' from the brew statemtn and loop over all the files to enable all the completions
-# NOTE: when running brew upgrade, then restarting terminal, reload needs to be run to run these and get git completions working. no idea why, its a bug that needs fixing.
 export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 [[ -r "/usr/local/etc/bash_completion.d/git-completion.bash" ]] && . "/usr/local/etc/bash_completion.d/git-completion.bash"
 [[ -r "/usr/local/etc/bash_completion.d/git-prompt.sh" ]] && . "/usr/local/etc/bash_completion.d/git-prompt.sh"
 
-# setup completions for dotfiles
-# source /usr/local/etc/bash_completion.d/git-completion.bash
-# __git_complete dotfiles _git
-
-# _dotfiles_completion() {
-#   local cur prev
-#   cur="${COMP_WORDS[COMP_CWORD]}"
-#   prev="${COMP_WORDS[COMP_CWORD - 1]}"
-#   case "$prev" in
-#     dotfiles)
-#       COMPREPLY=($(compgen -W "$(dotfiles --list-commands)" -- "$cur"))
-#       ;;
-#     *)
-#       COMPREPLY=($(compgen -f -- "$cur"))
-#       ;;
-#   esac
-#   return 0
-# }
-# complete -F _dotfiles_completion dotfiles
-
-# the /usr/local/etc/profile.d/bash_completion.sh script should source the @2 version:
-# /usr/local/Cellar/bash-completion@2/2.11/etc/profile.d/bash_completion.sh
-
-# this is here to test adding a new one to the list above
-# [[ -r "/usr/local/etc/bash_completion.d/git-completion.bash" ]] && . "/usr/local/etc/bash_completion.d/git-completion.bash"
-
-
-# # the homebrew page says:
-# if type brew &>/dev/null
-# then
-#   HOMEBREW_PREFIX="$(brew --prefix)"
-#   if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]
-#   then
-#     source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-#   else
-#     for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*
-#     do
-#       [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
-#     done
-#   fi
-# fi
-
-
-# another way to do it:
-# if which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
-# 	# Ensure existing Homebrew v1 completions continue to work
-# 	export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d";
-# 	source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
-# elif [ -f /etc/bash_completion ]; then
-# 	source /etc/bash_completion;
-# fi;
 
 #----------------------------------------------------------------------------------
 # for z package

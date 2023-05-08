@@ -1,8 +1,6 @@
-# made this oct 2022, also see the env var in bashrc
+
 # this is run as r code, so need to use Sys, e.g.:
 # Sys.setenv(key = "value")
-
-# see prominent r developer profile: https://github.com/randy3k/dotfiles/blob/master/.Rprofile
 
 # type into an r terminal to see where libraries are installed:
 # .libPaths()
