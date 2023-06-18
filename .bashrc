@@ -41,6 +41,11 @@ export -f updatePrompt
 export PROMPT_COMMAND='updatePrompt'
 
 # ----------------------------------------------------------------------------
+# use starship (overrides prompt above)
+# ----------------------------------------------------------------------------
+eval "$(starship init bash)"
+
+# ----------------------------------------------------------------------------
 # user specific alisases and functions
 # ----------------------------------------------------------------------------
 # most borrowed from https://natelandau.com/my-mac-osx-bash_profile/
@@ -79,6 +84,11 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 # next is for git managed dotfiles
 alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
+alias dfa='dotfiles add'
+alias dfb='dotfiles branch'
+alias dfs='dotfiles status'
+alias dfcm='dotfiles commit -m'
+alias dfsu='dotfiles status' # prevent accidentally trying -u
 # git-summary utility
 alias git-summary='/usr/local/sbin/git-summary/git-summary'
 
