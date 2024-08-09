@@ -1,10 +1,27 @@
 # shellcheck shell=bash
 
+set completion-ignore-case On
+
 # up and down arrow searching through history
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-set completion-ignore-case On
+# command-delete deletes the entire line
+# "\e[3;5~": kill-whole-line
+
+# command-left/right moves the cursor to end/beginning of line
+"\e[1;5H": beginning-of-line
+"\e[1;5F": end-of-line
+
+# option-left/right moves the cursor one word at a time left/right
+"\e[1;9D": backward-word
+"\e[1;9C": forward-word
+
+# command-shift-left/right highlights the entire line from the cursor position to the left/right
+# (Not possible with Readline)
+
+# option-shift-left/right highlights one word at a time left/right
+# (Not possible with Readline)
 
 # ----------------------------------
 # these were defined in my compy shell
