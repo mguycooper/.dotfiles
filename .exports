@@ -17,7 +17,7 @@ export USER_DATA_PATH=${HOME}/work/data
 export USER_PROJECT_PATH=${HOME}/myprojects
 export USER_SOURCE_PATH=${HOME}/mysource
 export USER_SCRIPTS_PATH=${HOME}/work/scripts
-export USER_MATFUNCLIB_PATH=${HOME}/MATLAB/matfunclib
+export USER_MATFUNCLIB_PATH=${HOME}/MATLAB/projects/matfunclib
 export USER_PYFUNCLIB_PATH=${USER_PROJECT_PATH}/python/pyfunclib
 
 export USER_E3SM_DATA_PATH=${HOME}/work/data/e3sm
@@ -33,17 +33,23 @@ export COMPY_E3SM_DATA_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm
 export COMPY_E3SM_FORCING_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm/forcing
 export COMPY_E3SM_CONFIG_PATH=${COMPY_ROOT_PATH}/qfs/people/coop558/data/e3sm/config
 
+export USER_GDRIVE_PATH="$HOME/guycooper@g.ucla.edu - Google Drive/My Drive"
+
 export CONSTANCE_ROOT_PATH=coop558@constance03:
 
-# git config's that use variable expansions
-git config --global core.excludesfile "$HOME/.gitignore_global" 
-git config --global commit.template "$HOME/.gitcommitmessage.txt"
+export NERSC_ROOT_PATH=mcooper@perlmutter.nersc.gov:
+export NERSC_SCRATCH_PATH=${NERSC_ROOT_PATH}/pscratch/sd/m/mcooper
+export NERSC_HOME_PATH=${NERSC_ROOT_PATH}/global/homes/m/mcooper
 
-# add my shell sripts to the path
-# export PATH="/usr/local/sbin:$HOME/opt:$USER_SCRIPTS_PATH/SHELL:$PATH"
+# git config's that use variable expansions
+# git config --global core.excludesfile "$HOME/.gitignore_global" 
+# git config --global commit.template "$HOME/.gitcommit_template"
 
 # for gfortran, may not be necessary if gfortran is reinstalled
 export LIBRARY_PATH="$LIBRARY_PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
+
+# see if this resolves octave errors
+# export DYLD_LIBRARY_PATH="/usr/local/lib:$DYLD_LIBRARY_PATH"
 
 #--------------------------------
 #   CONFIGURE BREW
@@ -99,6 +105,15 @@ export QGISPATH=/Applications/QGIS.app
 # for using qgis outside of qgis:
 # https://gis.stackexchange.com/questions/385395/using-pyqgis-functions-outside-qgis?noredirect=1&lq=1
 # spcifically the links in tara's answer, esp. link 1 and 3
+
+#--------------------------------
+#   CONFIGURE MATLAB
+#--------------------------------
+
+export MATLAB_ROOT_PATH=/Applications/MATLAB_R2022b.app # matlabroot
+# export MATLAB_EXEC_PATH=/Applications/MATLAB_R2022b.app/bin # not sure if this is needed, I thought it was used by something
+export MATLAB_EXEC_PATH=/Applications/MATLAB_R2022b.app/bin/matlab # executable, used by (unofficial) matlab vscode extension
+export MATLAB_STARTUP_PATH=$HOME/Documents/MATLAB # for code runner -sd $MATLAB_STARTUP_PATH option
 
 #--------------------------------
 #   CONFIGURE JAVA

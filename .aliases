@@ -58,6 +58,7 @@ alias cddata='cd $USER_DATA_PATH'
 alias cdnotes='cd $HOME/work/notes'
 alias cdp='cd $USER_PROJECT_PATH'
 alias cdpm='cd $USER_PROJECT_PATH/matlab'
+alias cdmp='cd $HOME/MATLAB/projects'
 alias cdpj='cd $USER_PROJECT_PATH/julia'
 alias cdpp='cd $USER_PROJECT_PATH/python'
 alias cdpc='cd $USER_PROJECT_PATH/conda'
@@ -99,11 +100,15 @@ alias whichcondaenv='echo $CONDA_DEFAULT_ENV'
 
 # ssh
 alias compy='ssh compy' # the "Host Name" in ~/.ssh/config permits 'ssh hostname' syntax
-alias constance='ssh coop558@constance.pnl.gov'
+alias constance='ssh constance'
+# alias constance='ssh coop558@constance.pnl.gov'
 alias cori='ssh -l mcooper -i ~/.ssh/nersc cori.nersc.gov' # to use this syntax, must first generate ssh key only valid for 24 hours use cd ~/work/scripts/ssh && ./sshproxy.sh -u mcooper then enter password + OTP code with no spaces
+alias nersc='ssh -l mcooper -i ~/.ssh/nersc perlmutter.nersc.gov'
 
 # use mrun in .functions instead
-# alias matlab="/Applications/MATLAB_R2022b.app/bin/matlab -nodisplay -nodesktop -nosplash" # -nojvm 
+# update may 2023- activated this to see if needed for matlab extensions in vscode
+alias matlab="/Applications/MATLAB_R2022b.app/bin/matlab -nodisplay -nodesktop -nosplash" # -nojvm 
+alias octave='/usr/local/bin/octave --gui --traditional'
 
 # Show/hide hidden files in Finder
 alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
