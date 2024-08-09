@@ -63,41 +63,6 @@ export HOMEBREW_CXX=g++-11
 export HOMEBREW_AUTO_UPDATE_SECS=604800	# autoupdate once a week (not every time).
 
 #--------------------------------
-#   CONFIGURE PYENV
-#--------------------------------
-
-# pyenv github page suggests this newer config setup should work:
-# export PYENV_ROOT="$HOME/.pyenv"
-# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-
-# expose pyenv and prefix source prompt with virtualenvwrapper environment
-if which pyenv > /dev/null; then
-	eval "$(pyenv init --path)";
-	eval "$(pyenv init -)"	
-	if which pyenv-virtualenv-init > /dev/null; then 
-		eval "$(pyenv virtualenv-init -)"; 
-	fi
-fi
-pyenv global 3.9.0 2.7.18 jupyter3 ipython2 tools3 tools2
-
-export WORKON_HOME=${HOME}/.virtualenvs	# folder where virtualenvwrapper puts virtualenvs
-export PROJECT_HOME=${USER_PROJECT_PATH}/python # folder where I keep my virtualenvs
-export PYENV_VIRTUALENVWRAPPER_PREFER_PYVENV="true" # tell pyenv to use pyenv-virtualenv
-export PYENV_VIRTUALENV_DISABLE_PROMPT="true" # turn off deprecated pyenv prompt
-export PYENV_VIRTUALENV_VERBOSE_ACTIVATE="true" # verbose activate behavior 
-	
-pyenv virtualenvwrapper_lazy
-
-#--------------------------------
-#   CONFIGURE ITERM2
-#--------------------------------
-iterm2_print_user_vars()
-{
-    iterm2_set_user_var python_venv "$VIRTUAL_ENV"
-}
-
-#--------------------------------
 #   CONFIGURE QGIS
 #--------------------------------
 export QGISPATH=/Applications/QGIS.app
@@ -124,12 +89,6 @@ export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/
 #   CONFIGURE CONDA
 #--------------------------------
 
-# enable conda autocompletion (got this to work by upgrading to bash v5)
-export CONDA_PREFIX=$HOME/opt/anaconda3
-if [[ -r $CONDA_PREFIX/etc/profile.d/bash_completion.sh ]]; then
-	source "$CONDA_PREFIX"/etc/profile.d/bash_completion.sh
-fi
-
 # define this for conda hooks
 export CONDA_PROJECT_HOME=${USER_PROJECT_PATH}/conda
 # export CONDA_PROJECT_PATH=${USER_PROJECT_PATH}/conda # init so the alias works
@@ -138,23 +97,23 @@ export CONDA_PROJECT_HOME=${USER_PROJECT_PATH}/conda
 # putting it here fixed the problem where conda deactivate never deactivated base
 export CONDA_AUTO_ACTIVATE_BASE=false
 
-# might revisit this thread to simplify the conda init stuff in bash_profile
-# https://stackoverflow.com/questions/54429210/how-do-i-prevent-conda-from-activating-the-base-environment-by-default
-# https://github.com/conda/conda/blob/main/CHANGELOG.md#recommended-change-to-enable-conda-in-your-shell
-
-# from the links above, something like this may be all that is needed:
-# eval "$('/C/ProgramData/Miniconda3/Scripts/conda.exe' 'shell.bash' 'hook')"
-
-# or this:
-# # source $HOME/opt/anaconda3/etc/profile.d/conda.sh
-
 #--------------------------------
 # 	PYTHONPATH, etc.
 #--------------------------------
 
-# expose pyfunclib
-export PYTHONPATH=${USER_PROJECT_PATH}/python/pyfunclib
-export PYTHONPATH=${USER_PROJECT_PATH}/python/pyflowline:${PYTHONPATH}
+# Add pyfunclib to python path
+# if [[ ":$PYTHONPATH:" != *":${USER_PROJECT_PATH}/python/pyfunclib:"* ]]; then
+#     export PYTHONPATH="${USER_PROJECT_PATH}/python/pyfunclib:${PYTHONPATH}"
+# fi
+
+# Add pyflowline to python path
+# if [[ ":$PYTHONPATH:" != *":${USER_PROJECT_PATH}/python/pyflowline:"* ]]; then
+#     export PYTHONPATH="${USER_PROJECT_PATH}/python/pyflowline:${PYTHONPATH}"
+# fi
+
+# # expose pyfunclib
+# export PYTHONPATH=${USER_PROJECT_PATH}/python/pyfunclib
+# export PYTHONPATH=${USER_PROJECT_PATH}/python/pyflowline:${PYTHONPATH}
 
 # i think i added this when building pyflowline from source
 # export PYTHONPATH=${WORKON_HOME}/pyflowline/lib/python3.9/site-packages:${PYTHONPATH}
@@ -177,15 +136,47 @@ export R_HOME=/Library/Frameworks/R.framework/Resources # R.home() in the R gui
 # alias radian='radian --r-binary=/path/to/R'
 
 #--------------------------------
-#   bash-completion (Git too)
+#   bash-completion (see bash_profile for sourcing them)
 #--------------------------------
 export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
-[[ -r "/usr/local/etc/bash_completion.d/git-completion.bash" ]] && . "/usr/local/etc/bash_completion.d/git-completion.bash"
-[[ -r "/usr/local/etc/bash_completion.d/git-prompt.sh" ]] && . "/usr/local/etc/bash_completion.d/git-prompt.sh"
-
 
 #----------------------------------------------------------------------------------
 # for z package
 # . /usr/local/etc/profile.d/z.sh
 #----------------------------------------------------------------------------------
+
+#--------------------------------
+# HDF5 / NETCDF
+#--------------------------------
+
+
+# This is for the full-on build of all dependencies from source I put in /usr/local/netcdf (see the build script in scripts/)
+# export PATH=/usr/local/netcdf/bin:$PATH
+# export LD_LIBRARY_PATH=/usr/local/netcdf/lib:$LD_LIBRARY_PATH
+# export C_INCLUDE_PATH=/usr/local/netcdf/include:$C_INCLUDE_PATH
+# export CPLUS_INCLUDE_PATH=/usr/local/netcdf/include:$CPLUS_INCLUDE_PATH
+# export MANPATH=/usr/local/netcdf/share/man:$MANPATH
+
+# # This was for a build using brew-installed hdf5 and pnetcdf
+# HDF5_PATH="$(brew --prefix hdf5-mpi)"
+# PNETCDF_PATH="$(brew --prefix pnetcdf)"
+# # NETCDF_PATH="$(brew --prefix netcdf)"
+
+# export HDF5_DIR="$HDF5_PATH"
+# export HDF5_ROOT="$HDF5_PATH"
+# export HDF5_HOME="$HDF5_PATH"
+# export PNETCDF_DIR="$PNETCDF_PATH"
+
+# Not if building from source
+# export NETCDF_DIR="$NETCDF_PATH"
+# export NETCDF_INCLUDE_DIR="$NETCDF_PATH/include"
+# export NETCDF_LIB="$NETCDF_PATH/lib"
+# export LD_LIBRARY_PATH="$HDF5_DIR/lib:$PNETCDF_DIR/lib:$NETCDF_DIR/lib:$LD_LIBRARY_PATH"
+
+# export LD_LIBRARY_PATH="$HDF5_DIR/lib:$PNETCDF_DIR/lib:$LD_LIBRARY_PATH"
+
+#--------------------------------
+# CMAKE
+#--------------------------------
+# Commented out, set on an individual basis for now
+# export CMAKE_INSTALL_PREFIX=${HOME}/opt
