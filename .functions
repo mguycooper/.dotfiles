@@ -1,35 +1,55 @@
 # shellcheck shell=bash
 
 #### bash functions _*_
+gsur() {
+    # Fetch all remotes quietly without showing output
+    git fetch --quiet
 
-# should probably move these the .local/bin (currently $HOME/bin)
-# and if desired, could replicate what happens here as:
-# for fileinc in ~/.local/bin*
-# do
-#    source ${fileinc}
-#    export -f ${fileinc}
-# done
-# unset fileinc
+    # Store the output of git status and git remote in variables
+    git_status=$(git status -u)
+    git_remote=$(git remote show origin)
 
-# or:
-# for fileinc in $HOME/.local/${SHELL##*/}/*.inc; do
-#         [ -r "$fileinc" ] && .  "$fileinc"
-# done
-# unset fileinc
+	# Check if 'upstream' remote exists
+    if git remote | grep -q "upstream"; then
+        git_upstream=$(git remote show upstream)
+    else
+        git_upstream="No upstream remote configured."
+    fi
 
-# The $@ passes the arguments into the function as-is. If nothing is passed in, it equals 0, but I modified to use -f $1 where $1 is the first argument. For multiple arguments, I would need to change that. 
-# mrun() {
-# 	if [ $@ -eq 0 ]; then
-#     	echo "please pass m file name as input"
-# 	fi
-# matlab -nodisplay -nosplash -nodesktop -r "run('$1'); | tail -n +11"
-# }
+    # Extract the first line of git status
+    git_status_first_line=$(echo "$git_status" | head -n 1)
+
+    # Extract the rest of git status
+    git_status_other_lines=$(echo "$git_status" | tail -n +2)
+
+    # Check if there are changes not staged for commit or untracked files
+    if echo "$git_status_other_lines" | grep -qE "(Changes not staged for commit|Untracked files)"; then
+        # Add a note about local changes to the first line of git status
+        git_status_first_line="$git_status_first_line with local changes."
+    fi
+
+    # Print the reformatted output
+    echo -e "$git_status_first_line\n"
+	echo -e "$git_upstream\n"
+    echo -e "$git_remote\n"
+    echo -e "$git_status_other_lines\n"
+}
 
 # remove a directory containing a .git directory
 rmproject() {
 	if [ -d "$1" ] && [ -d "$1"/.git ]; then
 		# echo "$1"
 		# rm -rf "$1"
+		trash "$1"
+	fi
+}
+
+# remove a directory containing a .DS_Store file
+# Note: the `trash` I installed is `macos-trash` it does not support -v or --verbose
+# Try `trash-cli` (https://github.com/andreafrancia/trash-cli) or `trash` (https://hasseg.org/trash/) for -flags
+trashdir() {
+	if [ -d "$1" ] && [ -f "$1"/.DS_Store ]; then
+		# echo "$1"
 		trash "$1"
 	fi
 }
@@ -134,6 +154,109 @@ dataurl () {
 	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
 }
 
+# gsur() {
+#     # fetch all remotes
+#     git fetch
+#
+#     # Store the output of git status and git remote in variables
+#     git_status=$(git status -u)
+#     git_remote=$(git remote show origin)
+#
+#     # Extract the first line of git status
+#     git_status_first_line=$(echo "$git_status" | head -n 1)
+#
+#     # Extract the rest of git status
+#     git_status_rest=$(echo "$git_status" | tail -n +2)
+#
+#     # Check if there are changes not staged for commit or untracked files
+#     if [[ $git_status_rest == *"Changes not staged for commit"* || $git_status_rest == *"Untracked files"* ]]; then
+#         # Add a note about local changes to the first line of git status
+#         git_status_first_line="$git_status_first_line but has local changes."
+#     fi
+#
+#     # Print the reformatted output
+#     echo -e "$git_status_first_line\n"
+#     echo -e "$git_remote\n"
+#     echo -e "$git_status_rest\n"
+# }
+#
+
+# gsur() {
+#
+# 	# fetch all remotes
+#     git fetch
+#
+# 	# Store the output of git status and git remote in variables
+#     git_status=$(git status -u)
+#     git_remote=$(git remote show origin)
+#
+# 	# Extract the first line of git status
+#     git_status_first_line=$(echo "$git_status" | head -n 1)
+#
+# 	# Extract the rest of git status
+#     git_status_rest=$(echo "$git_status" | tail -n +2)
+#
+#     # Check if there are changes not staged for commit or untracked files
+#     if [[ $git_status_rest == *"Changes not staged for commit"* || $git_status_rest == *"Untracked files"* ]]; then
+# 		# Add a note about local changes to the first line of git status
+#         git_status_first_line="$git_status_first_line but has local changes."
+#     fi
+#
+#     echo -e "$git_status_first_line\n"
+#     echo -e "$git_remote\n"
+#     echo -e "${git_status##*nothing to commit*}\n"
+# }
+#
+# gsur() {
+#   git fetch
+#   git_status=$(git status -u)
+#   git_remote_show=$(git remote show origin)
+#   echo "${git_status%%nothing to commit*}"
+#   echo
+#   echo "$git_remote_show"
+#   echo
+#   echo "${git_status##*nothing to commit*}"
+# }
+
+
+# # This is
+# gsur() {
+#     git fetch
+#     git_status_first_line=$(git status -u | head -n 1)
+#     git_remote=$(git remote show origin)
+#
+#     if git status -u | grep -q 'Changes not staged for commit\|Untracked files'; then
+#         git_status_first_line="$git_status_first_line but has local changes."
+#     fi
+#
+#     echo -e "$git_status_first_line\n"
+#     echo -e "$git_remote\n"
+#     echo -e "$(git status -u)\n"
+# }
+
+
+# should probably move these the .local/bin (currently $HOME/bin)
+# and if desired, could replicate what happens here as:
+# for fileinc in ~/.local/bin*
+# do
+#    source ${fileinc}
+#    export -f ${fileinc}
+# done
+# unset fileinc
+
+# or:
+# for fileinc in $HOME/.local/${SHELL##*/}/*.inc; do
+#         [ -r "$fileinc" ] && .  "$fileinc"
+# done
+# unset fileinc
+
+# The $@ passes the arguments into the function as-is. If nothing is passed in, it equals 0, but I modified to use -f $1 where $1 is the first argument. For multiple arguments, I would need to change that. 
+# mrun() {
+# 	if [ $@ -eq 0 ]; then
+#     	echo "please pass m file name as input"
+# 	fi
+# matlab -nodisplay -nosplash -nodesktop -r "run('$1'); | tail -n +11"
+# }
 
 # not sure if this is correct syntax for .functions, 
 # function whichreally() {

@@ -5,35 +5,40 @@
 # to test a new alias try `type <alias>` 
 
 alias reload='source $HOME/.bash_profile'
+alias update='brew update && brew upgrade && brew cleanup' #  && sudo port selfupdate && npm install npm -g && npm update -g && sudo softwareupdate -ia' TURNED OFF PORT and I think softwareupdate b/c they require vpn off. 
 alias cp='cp -iv' # ask to overwrite existing (i) and verbose (v)
-alias mv='mv -iv'
+alias mv='mv -iv' # ask to overwrite existing (i), be verbose (v), and build intermediate directories
 alias mkdir='mkdir -pv' # build intermediate directories if they don't exist, and be verbose
-alias ls='ls -AlF -G' # all files, long format, dirs/ executables* symlinks@, colorized
+alias rmdir='trashdir' 
+alias ls='ls -AlFh -G' # all files, long format, dirs/ executables* symlinks@, human readable, colorized
 alias lsdots='ls -d .*'
-alias lsdirs="ls -AlF -G | grep --color=never '^d'" # only directories
+alias lsdirs="ls | grep --color=never '^d'" # only directories
 alias lspath='echo -e ${PATH//:/\\n}; env | grep PATH' # list all executable Paths
 alias lsaliases="alias | sed 's/=.*//'"
 alias lsfunctions="declare -f | grep '^[a-z].* ()' | sed 's/{$//'"
 alias less='less -R' # recommended for spack (or -FSRXc)
 alias wget='wget -c' # resume interrupted downloads by default
 alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"	 # recursively delete .DS_Store files
-alias update='brew update && brew upgrade && brew cleanup && npm install npm -g && npm update -g && sudo softwareupdate -ia'
 alias which='type -all' # find executables
 alias paths='echo -e ${PATH//:/\\n}'
+
+# gdal / ogr
+alias shpdump='ogrinfo -al -so'
 
 # Git
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
 alias dotfiles-untracked='dotfiles ls-files --others' # NOTE: this will be extremely slow, for reference only
 alias git-summary='/usr/local/sbin/git-summary/git-summary'
 alias gsu='git status -u'
-alias gsur='git status -u && git remote show origin'
+# alias gsur='git remote show origin && git status -u'
+alias gsuu='git remote show upstream && git status -u'
 alias ga='git add -v' # verbose
-alias gd='git diff -w' # ignore whitespace
-alias gdstaged='git diff -w --cached --color=always'
-alias gdunstaged='git diff -w --color=always'
+alias gd='git diff -w -D --color=always' # ignore whitespace, suppress content for deleted files, use color even if output is piped or to file
+alias gdunstaged='git diff -w -D --color=always' # same as gd
+alias gdstaged='git diff -w -D --staged --color=always'
 alias gall='git add --all'
 alias gcm='git commit -m '
-alias grm='git rm --cached '
+alias grm='git rm --staged '
 alias gco='git checkout'
 alias gcob='git checkout -b'
 alias branches='git branch -a'
@@ -53,6 +58,7 @@ alias cddata='cd $USER_DATA_PATH'
 alias cdnotes='cd $HOME/work/notes'
 alias cdp='cd $USER_PROJECT_PATH'
 alias cdpm='cd $USER_PROJECT_PATH/matlab'
+alias cdmp='cd $HOME/MATLAB/projects'
 alias cdpj='cd $USER_PROJECT_PATH/julia'
 alias cdpp='cd $USER_PROJECT_PATH/python'
 alias cdpc='cd $USER_PROJECT_PATH/conda'
@@ -61,6 +67,7 @@ alias cdcondaenvs='cd $CONDA_PREFIX/envs'
 alias cdfoam='cd $HOME/openfoam/OpenFOAMs'
 alias cdmatfunclib='cd $USER_MATFUNCLIB_PATH'
 alias cdpyfunclib='cd $USER_PYFUNCLIB_PATH'
+alias cdgdrive='cd "$USER_GDRIVE_PATH"'
 alias ..='cd ../'
 alias ...='cd ../../'
 alias ....='cd ../../../'
@@ -93,11 +100,15 @@ alias whichcondaenv='echo $CONDA_DEFAULT_ENV'
 
 # ssh
 alias compy='ssh compy' # the "Host Name" in ~/.ssh/config permits 'ssh hostname' syntax
-alias constance='ssh coop558@constance.pnl.gov'
+alias constance='ssh constance'
+# alias constance='ssh coop558@constance.pnl.gov'
 alias cori='ssh -l mcooper -i ~/.ssh/nersc cori.nersc.gov' # to use this syntax, must first generate ssh key only valid for 24 hours use cd ~/work/scripts/ssh && ./sshproxy.sh -u mcooper then enter password + OTP code with no spaces
+alias nersc='ssh -l mcooper -i ~/.ssh/nersc perlmutter.nersc.gov'
 
 # use mrun in .functions instead
-# alias matlab="/Applications/MATLAB_R2022b.app/bin/matlab -nodisplay -nodesktop -nosplash" # -nojvm 
+# update may 2023- activated this to see if needed for matlab extensions in vscode
+alias matlab="/Applications/MATLAB_R2022b.app/bin/matlab -nodisplay -nodesktop -nosplash" # -nojvm 
+alias octave='/usr/local/bin/octave --gui --traditional'
 
 # Show/hide hidden files in Finder
 alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
@@ -115,6 +126,3 @@ alias mergepdf='gs -q -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=_merged.p
 # For example, to list all directories that contain a certain file:
 # find . -name .gitattributes | map dirname
 alias map="xargs -n1"
-
-# hub alias
-eval "$(hub alias -s)"

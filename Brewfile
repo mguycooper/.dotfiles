@@ -1,6 +1,4 @@
 tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/core"
 tap "homebrew/services"
 
 # I feel like these are not controversial
@@ -30,13 +28,13 @@ brew "zsh"
 # casks are for gui's / applications / large binaries
 cask "skyfonts"
 
-# just in case, since this interfered with conda
+# this previously interfered with conda so commented out
 # cask "gfortran"
 
 # keeping these separate in case I want to use pyenv
 # brew "python"
 # brew "scipy"
-# brew "gdal"
+# brew "gdal" # see macos setup doc about proper gdal install
 
 # Items I downloaded by hand but wish to track for future
 # brew cask iterm2
