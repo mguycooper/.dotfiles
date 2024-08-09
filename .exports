@@ -1,7 +1,6 @@
 # shellcheck shell=bash
 
 #### .exports
-
 export BASH_SILENCE_DEPRECATION_WARNING=1 # suppress the prompt to switch to zsh
 export CLICOLOR=1 # enable the use of color in the bash when using ls (if defined, can use -G rather than --colors=auto)
 export LSCOLORS=ExFxCxDxBxegedabagacad
