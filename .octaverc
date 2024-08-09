@@ -1,24 +1,106 @@
-% # ~/.octaverc: Octave per-user initialization file.
+# ~/.octaverc: Octave per-user initialization file.
 
-% Load standard packages
+# If octave is launched from the terminal, it will inherit the shell PATH, but if launched from gui, need to add system utilities to path. At minimum, this is needed to open pkg docs, which rely on /usr/local/bin/info
+currentPath = getenv("PATH");
+setenv("PATH", [currentPath, ":", "/usr/local/bin"]);
+
+warning('off','Octave:addpath-pkg')
+warning('off','Octave:shadowed-function')
+
+# function arguments validation blocks are not supported; INCORRECT RESULTS ARE POSSIBLE
+
+# Load standard packages
+pkg load io
 pkg load struct
 pkg load statistics
+pkg load optim
+# pkg load mapping # errors installing geometry prevent installing mapping
+pkg load image
 pkg load tablicious
-# pkg load optim
+pkg load packajoozle
+pkg load signal # couldn't get pkg install -forge control to work, which signal requires
 
-# To see which packages are installed
+# To reinstall packages:
+# pkg install -forge io
+# pkg install -forge struct
+# pkg install -forge statistics
+# pkg install -forge optim
+# pkg install -forge matgeom
+# pkg install -forge geometry
+# pkg install -forge mapping
+# pkg install -forge image
+# pkg install https://github.com/apjanke/octave-tablicious/archive/refs/heads/master.zip
+# pkg install https://github.com/apjanke/octave-packajoozle/archive/master.zip
+
+# Load my ~/.inputrc to override any conflicting keybindings from Octave.
+if (exist ("readline_read_init_file") == 5)
+  readline_read_init_file ("~/.inputrc");
+else
+  read_readline_init_file ("~/.inputrc");
+endif
+
+# Until I get startup.m octave-compatible, add my matlab path, but note - it will be helpful to keep this commented out for debugging octave portability
+addpath("~/MATLAB")
+addpath("~/Documents/MATLAB") # add this so funclibpath.m and finish.m are available when funclibpath('rmpath') is called
+
+# Once startup.m is octave-compatible:
+if exist('~/Documents/MATLAB/startup.m', 'file')
+   source('~/Documents/MATLAB/startup.m')
+endif
+
+warning('on','Octave:addpath-pkg')
+warning('on','Octave:shadowed-function')
+
+# Other recommended options to test later
+# struct_levels_to_print(1);
+suppress_verbose_help_message(1)
+page_output_immediately(1)
+page_screen_output(0)
+
+# # Eliminate nuisance octave-workspace files that appear when Octave is Ctrl+c exited or crashes.
+# crash_dumps_octave_core(0)
+# sigterm_dumps_octave_core(0)
+# sighup_dumps_octave_core(0)
+# % make Octave print immediately like Matlab.
+# page_output_immediately(1)
+
+# Octave might need lager font sizes than matlab
+set(0, "defaulttextfontsize", 24)  % title
+set(0, "defaultaxesfontsize", 16)  % axes labels
+set(0, "defaulttextfontname", "Source Code Pro")
+set(0, "defaultaxesfontname", "Source Code Pro")
+set(0, "defaultlinelinewidth", 2)
+
+
+# # To see which packages are installed
 # pkg list
 
-# To install packages:
+# # To install packages:
 # pkg install -forge struct
 # pkg install -forge statistics
 # pkg install -forge tablicious
 # pkg install -forge optim
+# pkg install -forge signal # findpeaks, rms, sgolayfilt, sgolay, 
+# pkg install -forge netcdf # all the ones you'd expect
+# pkg install -forge ncarray # small collection of functions for working with netcdf files
+# pkg install -forge strings # nothing useful
+# pkg install -forge image # appears to be a fairly complete drop in for matlab image toolbox
+# pkg install -forge mapping # all the mapping stuff, requires io, geometry, matgeom
+# pkg install -forge general # dict
+# pkg install -forge matgeom
+# pkg install -forge geometry # extends matgeom, huge libray, does not appear matlab compatible
+# pkg install -forge bioinfo
+# pkg install -forge pythonic
+# pkg install -forge jupyter-notebooks # requires json
+# pkg install -forge fem-fenics
+# pkg install -forge data-smoothing # only four or so functions, not recognized
 
+# # Turn off Octave's annoying pager.
+# warning("on", "Octave:language-extension");
 
 % ---------------------------------------------------------------------
 
-% # If Octave is running in a known terminal emulator set the title.
+# # If Octave is running in a known terminal emulator set the title.
 % term_title = ["GNU Octave " version];
 % if (exist ("isguirunning") && isguirunning ())
 %   PS1 ("octave:\\#> ");
@@ -35,13 +117,6 @@ pkg load tablicious
 %   edit mode async
 % else
 %   edit mode sync
-% endif
-
-% # Load my ~/.inputrc to override any conflicting keybindings from Octave.
-% if (exist ("readline_read_init_file") == 5)
-%   readline_read_init_file ("~/.inputrc");
-% else
-%   read_readline_init_file ("~/.inputrc");
 % endif
 
 % # Save interpreter history with the same settings as for bash.
