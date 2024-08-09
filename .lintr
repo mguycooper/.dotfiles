@@ -1,5 +1,7 @@
-# sensible linting suggested by vscode-R
-# see https://lintr.r-lib.org/articles/lintr.html for more options
-linters: with_defaults(
-  object_usage_linter = NULL,
-  commented_code_linter = NULL)
+linters: linters_with_defaults( # see https://lintr.r-lib.org/articles/lintr.html for more options
+  commented_code_linter = NULL,  # Disables checks for commented code blocks
+  line_length_linter = line_length_linter(120),  # Sets maximum line length
+  spaces_left_parentheses_linter = NULL,  # Disables checks for spaces before parentheses
+  object_name_linter(styles = c("snake_case", "camelCase", "CamelCase")), 
+  indentation_linter = indentation_linter(3)  # Sets tab width in spaces
+  )
