@@ -8,11 +8,12 @@
 #   |___/
 #
 
-# https://github.com/sadanand-singh/yadm-dotfiles/blob/osx/.gitconfig
-# https://github.com/nicolashery/mac-dev-setup/blob/master/.gitconfig
 # these are from https://github.com/DoomHammer/dotfiles/blob/master/.gitconfig	
 # for gitignore, see: https://www.toptal.com/developers/gitignore/
 # for git_template, see: https://github.com/greg0ire/git_template
+
+# Note: ~/ expands to $HOME, despite conflicting info online. probably not bulletproof, but works for both of my mac's. 
+# seems to be supported by the official docs too: https://git-scm.com/docs/git-config#_configuration
 
 [user]
     name = mgcooper
@@ -25,7 +26,7 @@
 	pager = (which diff-so-fancy >/dev/null 2>&1 && diff-so-fancy || which brew >/dev/null 2>&1 && $(brew --prefix git)/share/git-core/contrib/diff-highlight/diff-highlight || cat)|less
 	editor = code --wait --new-window # don't delete the --wait
 	symlinks = true
-	excludesfile = /Users/coop558/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	# hooksPath = ~/.config/githooks # use default hooks until these are configured
 [advice]
 	ignoredHook = true # alert if hook is non-executable
@@ -37,7 +38,9 @@
 	protocol = https
 [init]
 	defaultBranch = main
-	templateDir = ~/.git_template 	# this all goes into .git, so use hooksPath to do stuff like copy default README.md, .gitignore, etc.
+	templateDir = ~/.git_template # this all goes into .git, so use hooksPath to do stuff like copy default README.md, .gitignore, etc.
+[fetch]
+	prune = true
 [push]
 	default = current # important for rebase w/multiple computers strategy
 [pull]
@@ -45,8 +48,10 @@
 [rebase]
 	autoStash = true
 	# updateRefs = true # not sure yet, see https://github.blog/2022-10-03-highlights-from-git-2-38/
+[interactive]
+	singleKey = true
 [commit]
-	template = /Users/coop558/.gitcommitmessage.txt
+	template = ~/.gitcommit_template
 [merge]
 	tool = vscode
 [mergetool]
@@ -54,7 +59,6 @@
 	keepBackup = false
 [mergetool "vscode"]
 	cmd = code --wait --new-window $MERGED
-	# might switch to sublime-merge
 [diff]
 	tool = vscode
 	renames = true
@@ -88,6 +92,11 @@
 	a = add -v # testing -cached, should make it verbose
 	undo = reset --soft HEAD^
 	rmbranch = branch -D
+	# NOTE: git diff <branch>..stash@{0} might be the best way to see the diff b/w current 
+	diff-stash-head = diff stash@{0} HEAD # current head
+	diff-stash-working-tree = diff stash@{0} # local working tree, same as git stash show -l
+	diff-stash-parent = diff stash@{0}^ stash@{0} # parent commit of stash, same as git stash show -p
+	# stashunstaged = stash --keep-index --include-untracked # might not work b/c need git stash save "stash-name" --keep-index 
 	show-remote-origin = remote show origin
 	show-ignored = status --ignored -s # -s = short
 	ls-untracked = ls-files --others --exclude-standard
@@ -98,6 +107,7 @@
 	tags = tag -l
 	branches = branch -a
 	remotes = remote -v
+	# hist = git log --graph --all --oneline --decorate
 	hist = log --graph --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
 	find = log --graph --oneline --all --decorate --date-order --regexp-ignore-case --extended-regexp --grep
 	rfind = log --graph --oneline --all --decorate --date-order --regexp-ignore-case --extended-regexp --invert-grep --grep
@@ -110,14 +120,18 @@
 	branchbydate = for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'
 	branchcolor = "!for ref in $(git for-each-ref --sort=-committerdate --format=\"%(refname)\" refs/heads/ refs/remotes ); do git log -n1 $ref --pretty=format:\"%Cgreen%cr%Creset %C(yellow)%d%Creset %C(bold blue)<%an>%Creset%n\" | cat ; done | awk '! a[$0]++'"
 	ignore-list = "! cd -- \"${GIT_PREFIX:-.}\" && git ls-files -v ${1:-.} | sed -n -e \"s,^[a-z] \\(.*\\)$,${GIT_PREFIX:-./}\\1,p\" && git status --ignored --porcelain ${1:-.} 2>/dev/null | sed -n -e \"s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p\" #"
+	
+	# conventional commit
+	featlog = log --grep '^feat' --graph --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
+	fixlog = log --grep '^fix' --graph --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
+	breaklog = log --grep '^feat(.*)!:' --grep '^fix(.*)!:' --grep '^chore(.*)!:' --grep '^refactor(.*)!:' --graph --abbrev-commit --date-order --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]'
 [pager]
     status = true
 	# branch = false # not sure yet
 [help]
     autocorrect = 50 # 50 = 5 seconds to accept the correction, 10 = 1 second
 [include]
-	# this tells git to use .gitconfig.local instead of (or in addition to) .gitconfig then if you have multiple machines each one can have .gitconfig.local
-    # path = .gitconfig.local
+    path = ~/.gitconfig.local # use in addition to ~/.gitconfig
 [http "https://stash.pnnl.gov"]
 	proxy = http://proxy01.pnl.gov:3128	
 [https "https://stash.pnnl.gov"]
@@ -127,11 +141,14 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-# below were on personal mac but not pnnl, commneted out the diff/mergetool
 [credential "https://dev.azure.com"]
 	useHttpPath = true
-# [difftool "sourcetree"]
-# 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-# [mergetool "sourcetree"]
-# 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-# 	trustExitCode = true
+# [diff "jupyternotebook"]
+# 	command = git-nbdiffdriver diff
+# [merge "jupyternotebook"]
+# 	driver = git-nbmergedriver merge %O %A %B %L %P
+# 	name = jupyter notebook merge driver
+# [difftool "nbdime"]
+# 	cmd = git-nbdifftool diff \"$LOCAL\" \"$REMOTE\" \"$BASE\"
+# [mergetool "nbdime"]
+# 	cmd = git-nbmergetool merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"

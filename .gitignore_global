@@ -11,7 +11,7 @@ Thumbs.db
 .Trashes
 
 # data stuff
-data/
+# data/ # commented out aug 2023, in many cases we don't want to ignore this e.g. docs/ might have a folder for data
 *.xlsx
 *.xlsb
 *.xls
@@ -21,15 +21,7 @@ data/
 *.hd5
 
 # private stuff
-testbed/
-archive/
-scratch/
-bk/
-tmp/
-todo.md
-TODO.md
-*mgc
-mgc*
+# mgc: in info/exclude
 
 # submodules
 submodules/
@@ -65,9 +57,26 @@ submodules/
 # ----------------
 # ---- MATLAB ----
 # ----------------
+# note: put .prj under source control but not resources/ or mltbx
+resources/*
+*.mltbx
+*.mlappinstall
 pathdef.m
 *.asv
 *.~
+*.m~
+*.autosave
+*.slx.r*
+*.mdl.r*
+*.p
+*.mex*
+*.ctf
+helpsearch*/
+slprj/
+sccprj/
+codegen/
+*.slxc
+.MATLABDriveTag
 
 # -----------------
 # ---- PYTHON -----
