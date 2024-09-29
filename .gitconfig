@@ -132,10 +132,10 @@
     autocorrect = 50 # 50 = 5 seconds to accept the correction, 10 = 1 second
 [include]
     path = ~/.gitconfig.local # use in addition to ~/.gitconfig
-[http "https://stash.pnnl.gov"]
-	proxy = http://proxy01.pnl.gov:3128	
-[https "https://stash.pnnl.gov"]
-	proxy = http://proxy01.pnl.gov:3128
+# [http "https://stash.pnnl.gov"]
+# 	proxy = http://proxy01.pnl.gov:3128
+# [https "https://stash.pnnl.gov"]
+# 	proxy = http://proxy01.pnl.gov:3128
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
