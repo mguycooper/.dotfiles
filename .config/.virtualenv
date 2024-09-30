@@ -1,0 +1,11 @@
+[virtualenv]
+
+# mgc created 21 Jan 2023
+
+# Avoid recompiling numpy and other platform-provided packages EVERY
+# TIME that I build a virtualenv.  Which is often several times a day.
+
+system-site-packages = true
+
+# can put this in pyvenv.cfg in venv folders e.g. <HOME>/.pyenv/versions/3.9.0/envs/tools3/pyvenv.cfg
+# include-system-site-packages = true

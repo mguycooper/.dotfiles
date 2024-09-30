@@ -7,9 +7,9 @@ channels:
 changeps1: false
 channel_priority: strict
 add_pip_as_python_dependency: true # always install pip, wheel, and setuptools
-proxy_servers:
-  http: http://proxy01.pnl.gov:3128
-  https: http://proxy01.pnl.gov:3128
+# proxy_servers:
+#   http: http://proxy01.pnl.gov:3128
+#   https: http://proxy01.pnl.gov:3128
 
 # make conda-hooks a required install like pip is below and it will update the requirements file when a conda package is pushed to git
 # https://pypi.org/project/conda-hooks/ 

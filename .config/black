@@ -1,0 +1,3 @@
+[tool.black]
+line-length = 88 # 88 is default, just here for reference
+# see black --help for all options

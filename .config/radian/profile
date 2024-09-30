@@ -1,0 +1,117 @@
+# oct 2022 radian confg file. could also be $HOME/.radian_profile. less clutter here.
+# can also put config settings in .Rprofile, but that is not recommended.
+# below syntax is for .Rprofile or .radian_profile (they are both interpreted by R)
+
+# # # # # # # # # # # # # # # # # # # # # # #
+# this started from randy3k's dotfiles repo.
+
+options(
+    # see https://help.farbox.com/pygments.html for supported schemes, default is "native"
+    radian.color_scheme = "native",
+    radian.history_search_no_duplicates = TRUE,
+    radian.auto_match = TRUE, # auto match brackets and quotes
+    radian.completion_timeout = 0.05, # timeout in sec to cancel completion if it takes too long. set to 0 to disable it
+    radian.auto_indentation = TRUE, # auto indentation for new line and curly braces
+    radian.tab_size = 3,
+    radian.highlight_matching_bracket = TRUE,
+    radian.complete_while_typing = TRUE, # pop up completion while typing
+    radian.completion_prefix_length = 2, # the minimum length of prefix to trigger auto completions
+    # add spaces around equals in function argument completion
+    options(radian.completion_adding_spaces_around_equals = TRUE),
+    # this option is experimental and is known to break python prompt, use it with caution
+    # radian.auto_suggest = TRUE,
+    # indent continuation lines. turn off to copy code without extra indentation (less elegent layout)
+    # radian.indent_lines = FALSE,
+    # insert new line between prompts
+    # radian.insert_new_line = FALSE,
+    # radian.history_size = 100
+    # radian.auto_match.auto_indentation = FALSE
+    # radian.complete_commit_on_tab = TRUE
+)
+
+# i commented this out b/c i don't know what they do
+# options(radian.escape_key_map = list(
+#     list(key = "-", value = " <- "),
+#     list(key = "m", value = " %>% ")
+# ))
+
+
+# these were already commented out
+# options(radian.on_load_hooks = list(function() {
+#     getOption("rchitect.py_tools")$attach()
+
+#     radian <- import("radian")
+#     prompt_toolkit <- import("prompt_toolkit")
+
+#     KeyPress <- prompt_toolkit$key_binding$key_processor$KeyPress
+#     Keys <- prompt_toolkit$keys$Keys
+
+#     insert_mode <- radian$key_bindings$insert_mode
+#     app <- radian$get_app()
+#     kb <- app$session$modes$r$prompt_key_bindings
+
+#     kb$add("j", "j", filter = insert_mode)(function(event) {
+#         event$app$key_processor$feed(KeyPress(Keys$Escape))
+#     })
+# }))
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# below here is from the radian github page
+
+# # # # # # # # # # # # # # # # # # # # # #
+
+# # Do not copy the whole configuration, just specify what you need!
+# mgc: I moved stuff i wanted into the active options above, and left stuff i was unsure about
+
+# # either  `"emacs"` (default) or `"vi"`.
+# options(radian.editing_mode = "emacs")
+# # enable various emacs bindings in vi insert mode
+# options(radian.emacs_bindings_in_vi_insert_mode = FALSE)
+# # show vi mode state when radian.editing_mode is `vi`
+# options(radian.show_vi_mode_prompt = TRUE)
+# options(radian.vi_mode_prompt = "\033[0;34m[{}]\033[0m ")
+
+# # enable the [prompt_toolkit](https://python-prompt-toolkit.readthedocs.io/en/master/index.html) [`auto_suggest` feature](https://python-prompt-toolkit.readthedocs.io/en/master/pages/asking_for_input.html#auto-suggestion)
+# # this option is experimental and is known to break python prompt, use it with caution
+# options(radian.auto_suggest = FALSE)
+#
+
+
+# # automatically adjust R buffer size based on terminal width
+# options(radian.auto_width = TRUE)
+#
+# # insert new line between prompts
+# options(radian.insert_new_line = TRUE)
+#
+# # max number of history records
+# options(radian.history_size = 20000)
+
+# # where the global history is stored, environmental variables will be expanded
+# # note that "~" is expanded to %USERPROFILE% or %HOME% in Windows
+# options(radian.global_history_file = "~/.radian_history")
+
+# # the filename that local history is stored, this file would be used instead of
+# # `radian.global_history_file` if it exists in the current working directory
+# options(radian.local_history_file = ".radian_history")
+
+# # when using history search (ctrl-r/ctrl-s in emacs mode), do not show duplicate results
+# options(radian.history_search_no_duplicates = FALSE)
+
+# # ignore case in history search
+# options(radian.history_search_ignore_case = FALSE)
+
+# # do not save debug browser commands such as `Q` in history
+# options(radian.history_ignore_browser_commands = TRUE)
+#
+# # custom prompt for different modes
+# options(radian.prompt = "\033[0;34mr$>\033[0m ")
+# options(radian.shell_prompt = "\033[0;31m#!>\033[0m ")
+# options(radian.browse_prompt = "\033[0;33mBrowse[{}]>\033[0m ")
+#
+# # stderr color format
+# options(radian.stderr_format = "\033[0;31m{}\033[0m")
+#
+# # enable reticulate prompt and trigger `~`
+# options(radian.enable_reticulate_prompt = TRUE)
