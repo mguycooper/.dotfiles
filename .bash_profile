@@ -63,3 +63,6 @@ eval "$(gh completion -s bash)"
 
 # Added by rust
 . "$HOME/.cargo/env"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
