@@ -14,7 +14,7 @@ fi
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # user specific environment and startup programs
-export PATH="/usr/local/sbin:$PATH"
+export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
 # export PATH="/usr/local/anaconda3/bin:$PATH"  # commented out by conda initialize
 
 # enable the use of color in the bash when using ls and modify the command prompt so that the current working directory and ">>" are shown
