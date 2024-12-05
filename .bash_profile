@@ -37,6 +37,7 @@ export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/
 # to get gfortran to work, I had to add this, see http://wusun.name/blog/2018-04-27-conda-libgfortran-issue/ 
 # also see https://stackoverflow.com/questions/3146274/is-it-ok-to-use-dyld-library-path-on-mac-os-x-and-whats-the-dynamic-library-s
 export DYLD_FALLBACK_LIBRARY_PATH="/usr/local/anaconda3/lib:$DYLD_FALLBACK_LIBRARY_PATH"
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/usr/local/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
@@ -57,3 +58,6 @@ unset __conda_setup
 
 # for bash-completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+# source /usr/local/etc/bash_completion
+eval "$(gh completion -s bash)"
+
