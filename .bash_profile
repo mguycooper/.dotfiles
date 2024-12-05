@@ -61,3 +61,5 @@ unset __conda_setup
 # source /usr/local/etc/bash_completion
 eval "$(gh completion -s bash)"
 
+# Added by rust
+. "$HOME/.cargo/env"
