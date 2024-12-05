@@ -7,6 +7,7 @@
 [user]
     name = mgcooper
     email = mguycooper@gmail.com
+	signingkey = ""
 [credential]
 	username = mgcooper
 	helper = 
@@ -32,6 +33,7 @@
 	autoStash = true
 	# updateRefs = true # not sure yet, see https://github.blog/2022-10-03-highlights-from-git-2-38/
 [commit]
+	gpgsign = false
 	# template = /Users/coop558/.gitcommitmessage.txt
 [merge]
 	tool = vscode
@@ -164,3 +166,9 @@
 
 
 
+[gpg]
+	format = openpgp
+[gpg "openpgp"]
+	program = ""
+[http]
+	postBuffer = 104857600

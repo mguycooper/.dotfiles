@@ -23,7 +23,8 @@ Thumbs.db
 data/
 
 # private
-private/
+testbed/
+sandbox/
 archive/
 bk/
 todo.md
@@ -31,7 +32,7 @@ todo.txt
 readmemgc.txt
 
 # dotfiles bare repo
-.dotfiles
+.files
 
 
 
