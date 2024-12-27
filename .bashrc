@@ -74,6 +74,7 @@ alias cdmatfunclib='cd $HOME/MATLAB/projects/matfunclib'
 alias gsu='git status -u'
 alias gsur='git status -u && git remote show origin'
 alias ga='git add -v' # verbose
+alias gap='git add -p' # patch (interactive)
 alias gall='git add --all'
 alias gd='git diff -w' # ignore whitespace
 alias gdstaged='git diff -w -D --staged --color=always'
@@ -89,11 +90,15 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 # next is for git managed dotfiles
 alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
-alias dfa='dotfiles add'
-alias dfb='dotfiles branch'
-alias dfs='dotfiles status'
-alias dfcm='dotfiles commit -m'
-alias dfsu='dotfiles status' # prevent accidentally trying -u
+alias dsu='dotfiles status' # prevent accidentally trying -u (will list ALL FILES!!)
+alias da='dotfiles add -v'
+alias dap='dotfiles add -p'
+alias dall='dotfiles add' # prevent accidentally adding ALL FILES!!
+alias dd='dotfiles diff -w' # ignore whitespace
+alias ddstaged='dotfiles diff -w -D --staged --color=always'
+alias db='dotfiles branch'
+alias dcm='dotfiles commit -m'
+
 # git-summary utility
 alias git-summary='/usr/local/sbin/git-summary/git-summary'
 
