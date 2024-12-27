@@ -172,3 +172,5 @@
 	program = ""
 [http]
 	postBuffer = 104857600
+[interactive]
+	singlekey = true

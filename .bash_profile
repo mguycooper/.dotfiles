@@ -14,7 +14,7 @@ fi
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # user specific environment and startup programs
-export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME/.gem/ruby/2.6.0/bin:$PATH"
 # export PATH="/usr/local/anaconda3/bin:$PATH"  # commented out by conda initialize
 
 # enable the use of color in the bash when using ls and modify the command prompt so that the current working directory and ">>" are shown
@@ -27,7 +27,7 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 #export PS1="____   | \w @ \h (\u) \n| => "
 #export PS2="| => "
 
-export PS1='$PWD/\n mgc -> '
+# export PS1='$PWD/\n mgc -> ' # commented out for starship
 
 # dec 2022 - test to run freeze thaw 1d
 export JAVA_HOME="/usr/local/Cellar/openjdk/19.0.1/libexec/openjdk.jdk/Contents/Home"
@@ -58,6 +58,7 @@ unset __conda_setup
 
 # for bash-completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
 # source /usr/local/etc/bash_completion
 eval "$(gh completion -s bash)"
 

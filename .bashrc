@@ -15,30 +15,30 @@ fi
 # CONFIGURE PROMPT
 #----------------------------------------------------------------------------------
 # SET BASE PROMPT
-PS1='$PWD/\n '
-BASE_PROMPT=$PS1
-# ADD ACTIVE GIT BRANCH AND PYENV-VIRTUALENV TO PROMPT
-# (see https://github.com/pyenv/pyenv-virtualenv/issues/135#issuecomment-582180662)
-function updatePrompt { 
-    # Styles
-    GREEN='\[\e[0;32m\]'
-    BLUE='\[\e[0;34m\]'
-    RED='\[\e[0;95m\]'  # light magenta
-    RESET='\[\e[0m\]'
-    # Current Git repo
-    if type "__git_ps1" > /dev/null 2>&1; then
-        PROMPT="$BASE_PROMPT$(__git_ps1 "${RED}branch:${GREEN}(%s)${RESET}")"
-    fi
-    # Current virtualenv
-    if [[ $VIRTUAL_ENV != "" ]]; then
-        # Strip out the path and just leave the env name
-        PROMPT="$PROMPT${RED} env:${BLUE}{${VIRTUAL_ENV##*/}}${RESET}"
-    fi
-    PS1="$PROMPT${RESET} mgc~> "
-}
-export -f updatePrompt
-# Bash shell executes this function just before displaying the PS1 variable
-export PROMPT_COMMAND='updatePrompt'
+# PS1='$PWD/\n '
+# BASE_PROMPT=$PS1
+# # ADD ACTIVE GIT BRANCH AND PYENV-VIRTUALENV TO PROMPT
+# # (see https://github.com/pyenv/pyenv-virtualenv/issues/135#issuecomment-582180662)
+# function updatePrompt {
+#     # Styles
+#     GREEN='\[\e[0;32m\]'
+#     BLUE='\[\e[0;34m\]'
+#     RED='\[\e[0;95m\]'  # light magenta
+#     RESET='\[\e[0m\]'
+#     # Current Git repo
+#     if type "__git_ps1" > /dev/null 2>&1; then
+#         PROMPT="$BASE_PROMPT$(__git_ps1 "${RED}branch:${GREEN}(%s)${RESET}")"
+#     fi
+#     # Current virtualenv
+#     if [[ $VIRTUAL_ENV != "" ]]; then
+#         # Strip out the path and just leave the env name
+#         PROMPT="$PROMPT${RED} env:${BLUE}{${VIRTUAL_ENV##*/}}${RESET}"
+#     fi
+#     PS1="$PROMPT${RESET} mgc~> "
+# }
+# export -f updatePrompt
+# # Bash shell executes this function just before displaying the PS1 variable
+# export PROMPT_COMMAND='updatePrompt'
 
 # ----------------------------------------------------------------------------
 # use starship (overrides prompt above)
@@ -70,7 +70,7 @@ alias cdpm='cd $HOME/myprojects/matlab'
 alias cddata='cd $HOME/work/data'
 alias cdenvs='cd /usr/local/anaconda3/envs'
 alias cdgit='cd ~/Documents/git'
-alias cdmatfunclib='cd $HOME/MATLAB/matfunclib'
+alias cdmatfunclib='cd $HOME/MATLAB/projects/matfunclib'
 alias gsu='git status -u'
 alias gsur='git status -u && git remote show origin'
 alias ga='git add -v' # verbose
@@ -140,3 +140,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 . "$HOME/.cargo/env"
+
