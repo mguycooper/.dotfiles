@@ -1,0 +1,60 @@
+# ----------------------------------------------------------------------------
+# user specific alisases and functions
+# ----------------------------------------------------------------------------
+# most borrowed from https://natelandau.com/my-mac-osx-bash_profile/
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias mkdir='mkdir -pv'
+alias ls='ls -Ahl' 							# ls: 			Print all file names with human readable output
+alias lsdots='ls -d .*'
+alias which='type -all' 					# which:        Find executables
+alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
+alias home='cd $HOME'
+alias back='cd $OLDPWD'
+alias reload='source ~/.bash_profile'
+alias update='brew update && brew upgrade && brew cleanup'
+alias open='open -a TextMate'
+alias bashrc='open ~/.bashrc'
+alias bashprofile='open ~/.bash_profile'
+alias less='less -R'
+alias wget='wget -c'
+alias cdp='cd $HOME/myprojects'
+alias cdpm='cd $HOME/myprojects/matlab'
+alias cddata='cd $HOME/work/data'
+alias cdenvs='cd /usr/local/anaconda3/envs'
+alias cdgit='cd ~/Documents/git'
+alias cdmatfunclib='cd $HOME/MATLAB/projects/matfunclib'
+alias gsu='git status -u'
+alias gsur='git status -u && git remote show origin'
+alias ga='git add -v' # verbose
+alias gap='git add -p' # patch (interactive)
+alias gall='git add --all'
+alias gd='git diff -w' # ignore whitespace
+alias gdstaged='git diff -w -D --staged --color=always'
+alias gb='git branch -a'
+alias gcm='git commit -m'
+alias grm='git rm --cached'
+alias gco='git checkout'
+alias gcob='git checkout -b'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+# next is for git managed dotfiles
+alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.files/ --work-tree=$HOME'
+alias dsu='dotfiles status' # prevent accidentally trying -u (will list ALL FILES!!)
+alias da='dotfiles add -v'
+alias dap='dotfiles add -p'
+alias dall='dotfiles add' # prevent accidentally adding ALL FILES!!
+alias dd='dotfiles diff -w' # ignore whitespace
+alias ddstaged='dotfiles diff -w -D --staged --color=always'
+alias db='dotfiles branch'
+alias dcm='dotfiles commit -m'
+
+# git-summary utility
+alias git-summary='/usr/local/sbin/git-summary/git-summary'
+
+#   cleanupDS:  Recursively delete .DS_Store files
+#   -------------------------------------------------------------------
+alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"

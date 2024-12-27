@@ -1,0 +1,37 @@
+#----------------------------------------------------------------------------------
+# CONFIGURE PROMPT
+#----------------------------------------------------------------------------------
+# SET BASE PROMPT
+# PS1='$PWD/\n '
+# BASE_PROMPT=$PS1
+# # ADD ACTIVE GIT BRANCH AND PYENV-VIRTUALENV TO PROMPT
+# # (see https://github.com/pyenv/pyenv-virtualenv/issues/135#issuecomment-582180662)
+# function updatePrompt {
+#     # Styles
+#     GREEN='\[\e[0;32m\]'
+#     BLUE='\[\e[0;34m\]'
+#     RED='\[\e[0;95m\]'  # light magenta
+#     RESET='\[\e[0m\]'
+#     # Current Git repo
+#     if type "__git_ps1" > /dev/null 2>&1; then
+#         PROMPT="$BASE_PROMPT$(__git_ps1 "${RED}branch:${GREEN}(%s)${RESET}")"
+#     fi
+#     # Current virtualenv
+#     if [[ $VIRTUAL_ENV != "" ]]; then
+#         # Strip out the path and just leave the env name
+#         PROMPT="$PROMPT${RED} env:${BLUE}{${VIRTUAL_ENV##*/}}${RESET}"
+#     fi
+#     PS1="$PROMPT${RESET} mgc~> "
+# }
+# export -f updatePrompt
+# # Bash shell executes this function just before displaying the PS1 variable
+# export PROMPT_COMMAND='updatePrompt'
+
+# These were in bash_profile
+# modify the command prompt:
+#export PS1="\w>>"
+# I like these more: (\w = ~, \h = , \u = username, \n = newline)
+#export PS1="____   | \w @ \h (\u) \n| => "
+#export PS2="| => "
+
+# export PS1='$PWD/\n mgc -> ' # commented out for starship
